@@ -4,13 +4,13 @@
 
 ## Config Files
 
-| name                        | config file                                        | path to storage          |
-| :-:                         | :-:                                                | :-:                      |
-| [tmux](./Documents/tmux.md) | [tmux.conf](./confFiles/tmux.conf)                 | ~/.conf/tmux/tmux.conf   |
-| [zsh](./Documents/zsh.md)   | [.zshrc](./confFiles/.zshrc)                       | ~/.zshrc                 |
-| [vim](./Documents/vim.md)   | [.vimrc](./confFiles/.vimrc)                       | ~/.vimrc                 |
-| [coc](./Documents/coc.md)   | [coc-settings.json](./confFiles/coc-settings.json) | ~/.vim/coc-settings.json |
-|                             |                                                    |                          |
+| name                            | config file                                        | path to storage             |
+| :-:                             | :-:                                                | :-:                         |
+| [tmux](./Documents/tmux.md)     | [tmux.conf](./confFiles/tmux.conf)                 | ~/.conf/tmux/tmux.conf      |
+| [zsh](./Documents/zsh.md)       | [.zshrc](./confFiles/.zshrc)                       | ~/.zshrc                    |
+| [vim](./Documents/vim.md)       | [.vimrc](./confFiles/.vimrc)                       | ~/.vimrc                    |
+| [coc](./Documents/coc.md)       | [coc-settings.json](./confFiles/coc-settings.json) | ~/.vim/coc-settings.json    |
+| [termux](./Documents/termux.md) | [termux.properties](./confFiles/termux.properties) | ~/.termux/termux.properties |
 
 
 ## Software
