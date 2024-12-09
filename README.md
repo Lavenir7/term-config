@@ -99,23 +99,23 @@ $ sudo apt-get install figlet
 ```
 
 ### lolcat
-#### checkout `ruby`
+- checkout `ruby`
 ```sh
 $ ruby -v
 ```
 
-#### install ruby if not have ruby
+- install ruby if not have ruby
 ```sh
 $ sudo apt-get install ruby
 ```
 
-#### download lolcat
+- download lolcat
 ```sh
 $ curl -fLo ~/lolcat.zip https://github.com/busyloop/lolcat/archive/master.zip
 $ unzip ~/lolcat.zip
 ```
 
-#### install lolcat
+- install lolcat
 ```sh
 $ cd ~/lolcat-master/bin
 $ gem install lolcat
