@@ -81,8 +81,6 @@ map <C-s>k :res +5<CR>
 map <C-s>j :res -5<CR>
 map <C-s>h :vertical resize-5<CR>
 map <C-s>l :vertical resize+5<CR>
-" 打开浏览器
-nnoremap <LEADER>e :!start msedge<CR><CR> " for win10/11
 
 " 插入模式快捷键
 " 保存
