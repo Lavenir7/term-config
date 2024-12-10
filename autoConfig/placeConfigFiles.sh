@@ -20,9 +20,9 @@ NC="\033[0m"
 
 confPath="./confFiles"
 
-printf "=== Installing Lavenir7's config files ===\n\n"
+printf "=== Configuring Lavenir7's config files ===\n\n"
 replace_all=""
-installed=""
+placed=""
 for i in "${!rcfile[@]}"; 
 do 
     rcfpath="${confPath}/${rcfile[$i]}"
@@ -53,23 +53,23 @@ do
             cp "${rcfpath2store}" "${rcfpath2store}.bk"
             cp "${rcfpath}" "${rcfpath2store}"
             printf "${rcfile[$i]}.bk has been created.\n"
-            installed="true"
+            placed="true"
         elif [ "${replace}" == "a" ]; then
             cp "${rcfpath2store}" "${rcfpath2store}.bk"
             cp "${rcfpath}" "${rcfpath2store}"
             printf "${rcfile[$i]}.bk has been created.\n"
             replace_all="true"
-            installed="true"
+            placed="true"
         else
-            installed=""
+            placed=""
         fi
     else
         cp "${rcfpath}" "${rcfpath2store}"
-        installed="true"
+        placed="true"
     fi
-    if [ -n "${installed}" ]; then
-        printf "${GREEN}❯❯❯ \"${rcfile[$i]}\" install succeeded!\n${NC}"
+    if [ -n "${placed}" ]; then
+        printf "${GREEN}❯❯❯ \"${rcfile[$i]}\" placed successfully!\n${NC}"
     else
-        printf "${RED}❯❯❯ \"${rcfile[$i]}\" install failed.\n${NC}"
+        printf "${RED}❯❯❯ \"${rcfile[$i]}\" placement failed.\n${NC}"
     fi
 done
