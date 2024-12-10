@@ -26,16 +26,16 @@
 let mapleader=" "
 
 " 取消一些键
-map K <nop>
-map J <nop>
+noremap K <nop>
+noremap J <nop>
 " s - split
-map s <nop>
+noremap s <nop>
 " t - terminal
-map t <nop>
-" map <Left> <nop>
-" map <Right> <nop>
-" map <Up> <nop>
-" map <Down> <nop>
+noremap t <nop>
+" noremap <Left> <nop>
+" noremap <Right> <nop>
+" noremap <Up> <nop>
+" noremap <Down> <nop>
 
 " 更远的上下移动
 noremap J 5j
@@ -43,44 +43,44 @@ noremap K 5k
 noremap L $
 noremap H 0
 " <Ctrl>+l : 开关空白字符显示
-map <C-l> :set list!<CR>
+noremap <C-l> :set list!<CR>
 " tx : 艺术字生成
-map tx :r !figlet 
+noremap tx :r !figlet 
 " <Space>rc : 跳转到vim配置文件
-map <LEADER>rc :e ~/.vimrc<CR>
+noremap <LEADER>rc :e ~/.vimrc<CR>
 " <Space>R : 加载vim配置
-map <LEADER>rr :source $MYVIMRC<CR>
+noremap <LEADER>rr :source $MYVIMRC<CR>
 " <Ctrl>+h : 开关搜索结果高亮
-map <C-h> :set nohls!<CR>
+noremap <C-h> :set nohls!<CR>
 " <Space><Space> : placeholder edit
-map <LEADER><LEADER> <Esc>/<++><CR>:nohls<CR>c4l
+noremap <LEADER><LEADER> <Esc>/<++><CR>:nohls<CR>c4l
 " 将TAB替换为SPACE*4
-map ts :%s/\t/    /gc<CR>
+noremap ts :%s/\t/    /gc<CR>
 
 " 文件多开
 " 标签页
-map te :tabe<CR>
-map tn :tabn<CR>
-map tp :tabp<CR>
-map tc :tabc<CR>
+noremap te :tabe<CR>
+noremap tn :tabn<CR>
+noremap tp :tabp<CR>
+noremap tc :tabc<CR>
 " sk/sj/sh/sl : 上下左右分屏
-map sk :set nosplitbelow<CR>:split<CR>
-map sj :set splitbelow<CR>:split<CR>
-map sh :set nosplitright<CR>:vsplit<CR>
-map sl :set splitright<CR>:vsplit<CR>
+noremap sk :set nosplitbelow<CR>:split<CR>
+noremap sj :set splitbelow<CR>:split<CR>
+noremap sh :set nosplitright<CR>:vsplit<CR>
+noremap sl :set splitright<CR>:vsplit<CR>
 " <Space>k/j/h/l : 上下左右分屏之间移动
-map <LEADER>k <C-w>k
-map <LEADER>j <C-w>j
-map <LEADER>h <C-w>h
-map <LEADER>l <C-w>l
-" 更改分屏方向（sv切换成左右分屏，ss切换成上下分屏）
-map sv <C-w>t<C-w>H
-map ss <C-w>t<C-w>K
+noremap <LEADER>k <C-w>k
+noremap <LEADER>j <C-w>j
+noremap <LEADER>h <C-w>h
+noremap <LEADER>l <C-w>l
+" 更改分屏方向（ss切换成左右分屏，sv切换成上下分屏）
+noremap ss <C-w>t<C-w>H
+noremap sv <C-w>t<C-w>K
 " <Ctrl-s>k/j/h/l : 调整分屏大小
-map <C-s>k :res +5<CR>
-map <C-s>j :res -5<CR>
-map <C-s>h :vertical resize-5<CR>
-map <C-s>l :vertical resize+5<CR>
+noremap <C-s>k :res +5<CR>
+noremap <C-s>j :res -5<CR>
+noremap <C-s>h :vertical resize-5<CR>
+noremap <C-s>l :vertical resize+5<CR>
 
 " 插入模式快捷键
 " 保存
@@ -295,8 +295,9 @@ Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " 文件树
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} " 显示树状文件历史
 Plug 'w0rp/ale' " 显示warning/error
 Plug 'gcmt/wildfire.vim' " 回车选中区域
-Plug 'tpope/vim-surround' " 包裹词
+Plug 'tpope/vim-surround' " 包裹词(in visual-mode press 'S' or in normal-mode press 'cs')
 Plug 'RRethy/vim-illuminate' " 实时标注光标处词
+Plug 'mg979/vim-visual-multi' " 多光标
 Plug 'voldikss/vim-translator' " 翻译
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc [ not only for complete ]
 " Markdown
@@ -359,7 +360,7 @@ let g:mkdp_page_title = '「${name}」'
 " ===
 " === vim-table-mode
 " ===
-map <LEADER>tm :TableModeToggle<CR>
+noremap <LEADER>tm :TableModeToggle<CR>
 
 " ===
 " === vim-illuminate
@@ -367,19 +368,38 @@ map <LEADER>tm :TableModeToggle<CR>
 let g:Illuminate_delay = 750
 hi illuminatedWord cterm=underline gui=underline
 
+" ===
+" === vim-visual-multi
+" ===
+let g:VM_theme = 'iceblue'
+" let g:VM_default_mappings = 0
+" let g:VM_leader = {'default':',', 'visual': ',', 'buffer':','}
+" let g:VM_maps = 0
+" let g:VM_custom_motions = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
+" let g:VM_maps['i'] ='i'
+" let g:VM_maps['I'] ='I'
+" let g:VM_maps['Find Under'] = '<C-n>'
+" let g:VM_maps['Find Subword Under'] ='<C-N>'
+" let g:VM_maps['Find Next'] = 'n'
+" let g:VM_maps['Find Prev'] = 'N'
+" let g:VM_maps['Remove Region'] = 'Q'
+" let g:VM_maps['Skip Region'] = 'q'
+" let g:VM_maps["Undo"] = ''
+" let g:VM_maps["Redo"] = ''
+
 
 " ===
 " === vim-translator
 " ===
-nmap <silent> <LEADER>tt :TranslateW --engines=bing<CR>
-vmap <silent> <LEADER>tt :TranslateW --engines=bing<CR>
+nnoremap <silent> <LEADER>tt :TranslateW --engines=bing<CR>
+vnoremap <silent> <LEADER>tt :TranslateW --engines=bing<CR>
 
 " ===
 " === NERDTree
 " ===
 " r : 刷新文件树
 " tt : 打开/关闭文件树
-map tt :NERDTreeToggle<CR>
+noremap tt :NERDTreeToggle<CR>
 " let NERDTreeMapOpenExpl = ""
 " let NERDTreeMapUpdir = ""
 " l : 返回上一级目录
@@ -424,14 +444,14 @@ let b:ale_fixers = ['autopep8', 'yapf']
 " " === Goyo
 " " ===
 " <Space>+gy : 开启Goyo打字模式
-map <LEADER>gy :Goyo<CR>
+noremap <LEADER>gy :Goyo<CR>
 
 " " ===
 " " === Undotree
 " " ===
 let g:undotree_DiffAutoOpen = 0
 " U : 查看当前文件的历史版本树
-map U :UndotreeToggle<CR>
+noremap U :UndotreeToggle<CR>
 
 " ===
 " === coc
@@ -464,10 +484,10 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
     \ : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " 查看函数调用
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
 " 查看vim帮助文档
 nnoremap <silent> <LEADER>H :call <SID>show_documentation()<CR>
 
@@ -479,5 +499,5 @@ function! s:show_documentation()
     endif
 endfunction
 " 重命名变量
-nmap <LEADER>rn <Plug>(coc-rename)
+nnoremap <LEADER>rn <Plug>(coc-rename)
 
