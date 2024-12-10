@@ -12,6 +12,8 @@
 | [coc](./Documents/coc.md)       | [coc-settings.json](./confFiles/coc-settings.json) | ~/.vim/coc-settings.json    |
 | [termux](./Documents/termux.md) | [termux.properties](./confFiles/termux.properties) | ~/.termux/termux.properties |
 
+> You can run [this shell script](./autoConfig/placeConfigFiles.sh) to automatically place the config files.
+
 
 ## Software
 ### Required
