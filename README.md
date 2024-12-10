@@ -11,6 +11,8 @@
 | [vim](./Documents/vim.md)       | [.vimrc](./confFiles/.vimrc)                       | ~/.vimrc                    |
 | [coc](./Documents/coc.md)       | [coc-settings.json](./confFiles/coc-settings.json) | ~/.vim/coc-settings.json    |
 | [termux](./Documents/termux.md) | [termux.properties](./confFiles/termux.properties) | ~/.termux/termux.properties |
+| [ranger](#ranger)               | [ranger.conf](./confFiles/ranger.conf)             | ~/.conf/ranger/ranger.conf  |
+|                                 |                                                    |                             |
 
 > You can run [this shell script](./autoConfig/placeConfigFiles.sh) to automatically place the config files.
 

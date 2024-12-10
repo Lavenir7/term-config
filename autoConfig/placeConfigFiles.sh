@@ -4,12 +4,14 @@
 rcfile=("tmux.conf"
 ".zshrc"
 ".vimrc"
+"ranger.conf"
 "coc-settings.json")
 
 # path to store config files
 path_to_store=("${HOME}/.conf/tmux"
 "${HOME}"
 "${HOME}"
+"${HOME}/.conf/ranger
 "${HOME}/.vim")
 
 # colors
