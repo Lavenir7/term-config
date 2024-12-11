@@ -29,7 +29,7 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/t
 ### Theme `Powerlevel10k`
 #### install Nerd Font (FiraMono)
 - way 1: download the font-file manually
-    - download the font-file on [github's page](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/FiraMono/Regular/FiraMonoNerdFont-Regular.otf)
+    - download the font-file on [NerdFonts Page](https://www.nerdfonts.com/font-downloads)
     - move the font-file to `/usr/share/fonts/OTF/`
     - refresh
     ```sh

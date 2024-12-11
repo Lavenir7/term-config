@@ -23,7 +23,7 @@ You can install vim plugins manually:
 5. install Nerd Font (Source Code Pro)
 
 - way 1: download the font-file manually
-    - download the font-file on [github's page](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Source Code Pro/Regular/Source Code ProNerdFont-Regular.otf)
+    - download the font-file on [NerdFonts Page](https://www.nerdfonts.com/font-downloads)
     - move the font-file to `/usr/share/fonts/OTF/`
     - refresh
     ```sh
