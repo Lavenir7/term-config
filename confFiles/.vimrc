@@ -54,7 +54,7 @@ noremap <LEADER>rr :source $MYVIMRC<CR>
 noremap <C-h> :set nohls!<CR>
 " <Space><Space> : placeholder edit
 noremap <LEADER><LEADER> <Esc>/<++><CR>:nohls<CR>c4l
-" 将TAB替换为SPACE*4
+" ts : tab to space
 noremap ts :%s/\t/    /gc<CR>
 
 " 文件多开
@@ -81,8 +81,6 @@ noremap <C-s>k :res +5<CR>
 noremap <C-s>j :res -5<CR>
 noremap <C-s>h :vertical resize-5<CR>
 noremap <C-s>l :vertical resize+5<CR>
-" 打开浏览器
-nnoremap <LEADER>e :!start msedge<CR><CR> " for win10/11
 
 " 插入模式快捷键
 " 保存
@@ -157,9 +155,9 @@ set cursorline
 " 突出显示当前列
 " set cursorcolumn
 " 不显示特殊字符
-set nolist
+set list
 " 设置特殊字符显示（tab：TAB，space：空格，trail：痕迹/空格拖尾，eol：行尾）
-set listchars=tab:▏\ ,space:▫,trail:༶,eol:\ 
+set listchars=tab:▏\ ,space:∷,trail:༶,eol:\ 
 " 设置特殊字符颜色
 hi SpecialKey ctermfg=235 ctermbg=233
 " 前置菜单配色
@@ -290,12 +288,12 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'vim-airline/vim-airline' " 状态栏样式
+" Plug 'vim-airline/vim-airline' " 状态栏样式
 Plug 'connorholyday/vim-snazzy' " snazzy主题
 Plug 'junegunn/goyo.vim', {'on': 'Goyo'} " 打字模式
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " 文件树
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} " 显示树状文件历史
-Plug 'w0rp/ale' " 显示warning/error
+" Plug 'w0rp/ale' " 显示warning/error
 Plug 'gcmt/wildfire.vim' " 回车选中区域
 Plug 'tpope/vim-surround' " 包裹词(in visual-mode press 'S' or in normal-mode press 'cs')
 Plug 'RRethy/vim-illuminate' " 实时标注光标处词
@@ -303,8 +301,9 @@ Plug 'mg979/vim-visual-multi' " 多光标
 Plug 'voldikss/vim-translator' " 翻译
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc [ not only for complete ]
 " Git
-Plug 'airblade/vim-gitgutter' " show git status on the side
-Plug 'junegunn/gv.vim' " view git history?
+Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/gv.vim'
+" Plug 'tpope/vim-fugitive'
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
@@ -365,16 +364,17 @@ let g:mkdp_page_title = '「${name}」'
 " ===
 " === vim-gitgutter
 " ===
-let g:gitgutter_map_keys = 0 " disable all gitgutter-key mappings
+" let g:gitgutter_map_keys = 0 " disable all gitgutter-key mappings
+noremap gt :GitGutter
 set signcolumn=yes " keep gitgutter sign column on
 " " --- Sign
-" " signs (<= 2) ┆
+" " signs (<= 2)
 let g:gitgutter_sign_added = ''
 let g:gitgutter_sign_modified = '▒'
 let g:gitgutter_sign_removed = '﹏'
 let g:gitgutter_sign_removed_first_line = '▔'
-let g:gitgutter_sign_removed_above_and_below = ''
-let g:gitgutter_sign_modified_removed = '▒'
+let g:gitgutter_sign_removed_above_and_below = '┆'
+let g:gitgutter_sign_modified_removed = '░'
 " " colors
 " highlight GitGutterAdd guifg=#009900 ctermfg=2
 " highlight GitGutterChange guifg=#bbbb00 ctermfg=3
@@ -498,12 +498,13 @@ let g:coc_global_extensions = [
     \ 'coc-json', 
     \ 'coc-vimlsp',
     \ 'coc-python',
+    \ 'coc-jedi',
     \ 'coc-css',
     \ 'coc-gitignore',
     \ 'coc-marketplace'
     \ ]
 " 左侧行号与标记共用
-set signcolumn=number
+" set signcolumn=number
 set updatetime=100 " 补全信息反应更快
 set shortmess+=c " 补全信息，更少的信息
 " tab补全
