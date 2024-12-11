@@ -81,6 +81,8 @@ noremap <C-s>k :res +5<CR>
 noremap <C-s>j :res -5<CR>
 noremap <C-s>h :vertical resize-5<CR>
 noremap <C-s>l :vertical resize+5<CR>
+" 打开浏览器
+nnoremap <LEADER>e :!start msedge<CR><CR> " for win10/11
 
 " 插入模式快捷键
 " 保存
@@ -300,6 +302,9 @@ Plug 'RRethy/vim-illuminate' " 实时标注光标处词
 Plug 'mg979/vim-visual-multi' " 多光标
 Plug 'voldikss/vim-translator' " 翻译
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc [ not only for complete ]
+" Git
+Plug 'airblade/vim-gitgutter' " show git status on the side
+Plug 'junegunn/gv.vim' " view git history?
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
@@ -356,6 +361,36 @@ let g:mkdp_markdown_css = ''
 let g:mkdp_highlight_css = ''
 let g:mkdp_port = ''
 let g:mkdp_page_title = '「${name}」'
+
+" ===
+" === vim-gitgutter
+" ===
+let g:gitgutter_map_keys = 0 " disable all gitgutter-key mappings
+set signcolumn=yes " keep gitgutter sign column on
+" " --- Sign
+" " signs (<= 2) ┆
+let g:gitgutter_sign_added = '▎'
+let g:gitgutter_sign_modified = '░'
+let g:gitgutter_sign_removed = '_'
+let g:gitgutter_sign_removed_first_line = '▔'
+let g:gitgutter_sign_removed_above_and_below = '['
+let g:gitgutter_sign_modified_removed = '▒'
+" " colors
+" highlight GitGutterAdd guifg=#009900 ctermfg=2
+" highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+" highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+" " --- Line
+" highlight link GitGutterAddLine DiffAdd
+" highlight link GitGutterChangeLine DiffChange
+" highlight link GitGutterDeleteLine DiffDelete
+" highlight link GitGutterChangeDeleteLine DiffChange
+" " --- view diff
+" GitGutterAddIntraLine gui=reverse cterm=reverse
+" GitGutterDeleteIntraLine gui=reverse cterm=reverse
+" " set diff relative
+" let g:gitgutter_diff_relative_to = 'working_tree'
+" " set diff base
+" let g:gitgutter_diff_base = '<commit SHA>'
 
 " ===
 " === vim-table-mode
