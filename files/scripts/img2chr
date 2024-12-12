@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+
+from PIL import Image
+import sys
+import subprocess
+import os
+
+version = "1.1.1"
+help_document = """
+Welcome to img2chr~
+
+Usage: img2chr [OPTION]... [IMG_FILE]...
+
+OPTION(s):
+    -w, --maxWidth=<n>    Sets the maximum width of the image (default: 10000)
+    -x, --pixel=<char>    Sets the character of the pixel (default: █)
+    -r, --rotate=<angle>  Rotate the image clockwise (default: 0 | optional: multiples of 90)
+    -v, --version         Print version
+    -h, --help            Show the help document
+
+Example:
+    img2chr -w 200 -x # /home/name/Pictures/example.jpg
+        -> Displays the image example.jpg in a mode with a maximum width of 200 pixels and a pixel character of #.
+
+Author's github homepage: https://github.com/Lavenir7/
+
+"""
+MAXWIDTH = 10000
+POINTs = '█' # ■ ◼ ▪ █ ▇
+PIXSIZE = 2
+ROTATE = 0
+imgs_path = []
+canrun = True
+
+def printrgb(rgb):
+    r, g, b = rgb
+    print(f"\033[38;2;{r};{g};{b}m{POINTs*PIXSIZE}\033[0m", end = '')
+
+def getScreenWidth():
+    result = subprocess.run("tput cols", shell = True, capture_output = True, text = True)
+    scrwidth = int(min(int(result.stdout)/2*PIXSIZE, MAXWIDTH*PIXSIZE))
+    return scrwidth
+
+def printimg(img):
+    pixels = img.load()
+    w, h = img.width, img.height
+
+    print('+' + "--"*w + '+')
+    for y in range(h):
+        print('|', end = '')
+        for x in range(w):
+            printrgb(pixels[x, y])
+        print('|')
+    print('+' + "--"*w + '+')
+
+def getImg(img_path):
+    global PIXSIZE, ROTATE
+    img = Image.open(img_path).convert("RGB")
+    if ROTATE in (90, 180, 270):
+        if ROTATE == 90:
+            img = img.transpose(Image.ROTATE_270)
+        elif ROTATE == 180:
+            img = img.transpose(Image.ROTATE_180)
+        elif ROTATE == 270:
+            img = img.transpose(Image.ROTATE_90)
+    widthi = int(getScreenWidth()/PIXSIZE) - 3
+    heighti = int(widthi/img.width*img.height)
+    if img.width > widthi:
+        img = img.resize((widthi, heighti))
+    return img
+
+def printHelp():
+    global canrun
+    print(help_document)
+    canrun = False
+
+def printVersion():
+    global canrun
+    print(f"img2chr {version}")
+    canrun = False
+
+def printillg(parm = None):
+    global canrun
+    if parm != None:
+        parm = ": " + parm
+    print(f"\033[31mInvalid parameter{parm}\033[0m")
+    canrun = False
+
+def addImgPath(img_pathi, ppbool):
+    global imgs_path, canrun
+    if os.path.exists(img_pathi) and os.path.isfile(img_pathi):
+        imgs_path.append(img_pathi)
+    else:
+        if ppbool:
+            printillg(img_pathi)
+        else:
+            print(f"\033[31m{img_pathi} doesn't exist!\033[0m")
+        canrun = False
+
+def handlparms():
+    global args, MAXWIDTH, POINTs, PIXSIZE, ROTATE
+    if len(args) == 0:
+        printHelp()
+        return
+    else:
+        skip = False
+        for i, argi in enumerate(args):
+            if skip:
+                skip = False
+                continue
+            ppb = False # record whether <argi> is a param
+            if (i + 1) < len(args):
+                pparm = args[i+1]
+            # get mode
+            if argi.startswith("--"):
+                if '=' in argi:
+                    mode, pparm = argi[2:].split('=')
+                else:
+                    mode = argi[2:]
+                ppb = True
+            elif argi.startswith('-'):
+                mode = argi[1:]
+                ppb = True
+                skip = True
+            # judgment and process
+            if ppb:
+                if mode in ('h', "help"):
+                    printHelp()
+                    return
+                elif mode in ('v', "version"):
+                    printVersion()
+                    return
+                elif mode in ('w', "maxwidth"):
+                    try:
+                        pparm = int(pparm)
+                    except:
+                        printillg(pparm)
+                        return
+                    MAXWIDTH = pparm
+                elif mode in ('x', "pixel"):
+                    POINTs = pparm
+                    if "\u4e00" <= POINTs <= "\u9fff":
+                        # chinese character
+                        PIXSIZE = 1
+                elif mode in ('r', "rotate"):
+                    try:
+                        pparm = int(pparm)
+                    except:
+                        printillg(pparm)
+                        return
+                    ROTATE = pparm%360
+                else:
+                    skip = False
+                    addImgPath(argi, True)
+            else:
+                skip = False
+                addImgPath(argi, False)
+
+def main():
+    global imgs_path
+    for imgpi in imgs_path:
+        print(" @ " + imgpi)
+        printimg(getImg(imgpi))
+        print()
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    handlparms()
+    if canrun:
+        main()
+
