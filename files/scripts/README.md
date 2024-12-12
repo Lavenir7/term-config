@@ -20,6 +20,7 @@ $ sudo pip install lxml
 
 ## img2chr
 ### source
+[img2chr](https://github.com/Lavenir7/img2chr/raw/refs/heads/main/script/img2chr)
 
 ### requires
 - env: python3
