@@ -135,12 +135,25 @@ alias lh="ls -h"
 alias ll="ls -l"
 alias la="ls -a"
 alias ra="ranger"
+alias ya="yazi"
 alias md="glow"
 alias python="python3.10"
 alias pip="pip3.10"
 # my script [ self-defined ]
 alias s="/usr/local/bin/show.sh"
 alias imgcat="/usr/local/bin/img2chr.py"
+
+# ===
+# === yazi
+# ===
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
 
 # ===
 # === config
