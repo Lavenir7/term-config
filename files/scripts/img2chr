@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from PIL import Image
 import sys
 import subprocess
 import os
 
-version = "1.1.1"
+version = "1.1.2"
 help_document = """
 Welcome to img2chr~
 
@@ -13,20 +13,20 @@ Usage: img2chr [OPTION]... [IMG_FILE]...
 
 OPTION(s):
     -w, --maxWidth=<n>    Sets the maximum width of the image (default: 10000)
-    -x, --pixel=<char>    Sets the character of the pixel (default: █)
+    -W, --minWidth=<n>    Sets the minimum width of the image (default: 25)
+    -x, --pixel=<char>    Sets the character of the pixel (default: ▒)
     -r, --rotate=<angle>  Rotate the image clockwise (default: 0 | optional: multiples of 90)
     -v, --version         Print version
     -h, --help            Show the help document
 
 Example:
-    img2chr -w 200 -x # /home/name/Pictures/example.jpg
-        -> Displays the image example.jpg in a mode with a maximum width of 200 pixels and a pixel character of #.
-
-Author's github homepage: https://github.com/Lavenir7/
+    img2chr -w 200 -x # example.jpg
+        -> Print the image example.jpg in a mode with a maximum width of 200 pixels and a pixel character of #.
 
 """
 MAXWIDTH = 10000
-POINTs = '█' # ■ ◼ ▪ █ ▇
+MINWIDTH = 25
+POINTs = '▒' # █
 PIXSIZE = 2
 ROTATE = 0
 imgs_path = []
@@ -37,8 +37,11 @@ def printrgb(rgb):
     print(f"\033[38;2;{r};{g};{b}m{POINTs*PIXSIZE}\033[0m", end = '')
 
 def getScreenWidth():
-    result = subprocess.run("tput cols", shell = True, capture_output = True, text = True)
-    scrwidth = int(min(int(result.stdout)/2*PIXSIZE, MAXWIDTH*PIXSIZE))
+    try:
+        result = subprocess.run("tput cols", shell = True, capture_output = True, text = True)
+        scrwidth = int(min(int(result.stdout)/2*PIXSIZE, MAXWIDTH*PIXSIZE))
+    except:
+        scrwidth = MINWIDTH # default width when without 'tput'
     return scrwidth
 
 def printimg(img):
@@ -98,7 +101,7 @@ def addImgPath(img_pathi, ppbool):
         canrun = False
 
 def handlparms():
-    global args, MAXWIDTH, POINTs, PIXSIZE, ROTATE
+    global args, MAXWIDTH, MINWIDTH, POINTs, PIXSIZE, ROTATE
     if len(args) == 0:
         printHelp()
         return
@@ -137,6 +140,13 @@ def handlparms():
                         printillg(pparm)
                         return
                     MAXWIDTH = pparm
+                elif mode in ('W', "minwidth"):
+                    try:
+                        pparm = int(pparm)
+                    except:
+                        printillg(pparm)
+                        return
+                    MINWIDTH = pparm
                 elif mode in ('x', "pixel"):
                     POINTs = pparm
                     if "\u4e00" <= POINTs <= "\u9fff":
