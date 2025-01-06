@@ -294,6 +294,7 @@ Plug 'junegunn/goyo.vim', {'on': 'Goyo'} " 打字模式
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " 文件树
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} " 显示树状文件历史
 " Plug 'w0rp/ale' " 显示warning/error
+Plug 'davidhalter/jedi-vim' " python函数跳转
 Plug 'gcmt/wildfire.vim' " 回车选中区域
 Plug 'tpope/vim-surround' " 包裹词(in visual-mode press 'S' or in normal-mode press 'cs')
 Plug 'RRethy/vim-illuminate' " 实时标注光标处词
@@ -360,6 +361,20 @@ let g:mkdp_markdown_css = ''
 let g:mkdp_highlight_css = ''
 let g:mkdp_port = ''
 let g:mkdp_page_title = '「${name}」'
+
+" ===
+" === jedi-vim
+" ===
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_stubs_command = "<leader>s"
+let g:jedi#goto_definitions_command = "gd"
+let g:jedi#documentation_command = "D"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
+
+" test line === end
 
 " ===
 " === vim-gitgutter
@@ -472,8 +487,8 @@ let g:NERDTreeIndicatorMapCustom = {
 " " ===
 " 安装以下python库
 " pip install pylint autopep8 yapf
-let b:ale_linters = ['pylint']
-let b:ale_fixers = ['autopep8', 'yapf']
+" let b:ale_linters = ['pylint']
+" let b:ale_fixers = ['autopep8', 'yapf']
 
 " " ===
 " " === Goyo
@@ -492,13 +507,10 @@ noremap U :UndotreeToggle<CR>
 " === coc
 " ===
 " coc插件
-" pip install jedi (for python)
 nnoremap coc :CocCommand<CR> " 开启coc命令行
 let g:coc_global_extensions = [
     \ 'coc-json', 
     \ 'coc-vimlsp',
-    \ 'coc-python',
-    \ 'coc-jedi',
     \ 'coc-css',
     \ 'coc-gitignore',
     \ 'coc-marketplace'
