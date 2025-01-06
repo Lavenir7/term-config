@@ -24,7 +24,7 @@ You can install vim plugins manually:
 
 - way 1: download the font-file manually
     - download the font-file on [NerdFonts Page](https://www.nerdfonts.com/font-downloads)
-    - move the font-file to `/usr/share/fonts/OTF/`
+    - move the font-file to `/usr/share/fonts/opentype/`
     - refresh
     ```sh
     fc-cache -v
