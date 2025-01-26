@@ -1,19 +1,24 @@
 #!/bin/bash
 
-# config files
+# config files *
 rcfile=("tmux/tmux.conf"
 "zsh/.zshrc"
 "vim/.vimrc"
 "vim/keys.vim"
 "vim/mini.vim"
-"vim/coc-settings.json")
+"vim/coc-settings.json"
+"superfile/config.toml"
+"superfile/hotkeys.toml")
 
-# path to store config files
+# path to store config files *
 path_to_store=("${HOME}/.conf/tmux"
 "${HOME}"
 "${HOME}"
 "${HOME}/.conf/vim"
-"${HOME}/.vim")
+"${HOME}/.conf/vim"
+"${HOME}/.vim"
+"${HOME}/.config/superfile"
+"${HOME}/.config/superfile")
 
 # colors
 RED="\033[0;31m"

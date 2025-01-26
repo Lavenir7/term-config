@@ -13,6 +13,7 @@
 | [vimm](./Documents/vim.md)            | [mini.vim](./confFiles/vim/mini.vim)                      | ~/.conf/vim/mini.vim             |
 | [coc](./Documents/coc.md)             | [coc-settings.json](./confFiles/vim/coc-settings.json)    | ~/.vim/coc-settings.json         |
 | [termux](./Documents/termux.md)       | [termux.properties](./confFiles/termux/termux.properties) | ~/.termux/termux.properties      |
+| [superfile](./Documents/superfile.md) | [config.toml](./confFiles/superfile/config.toml)          | ~/.config/superfile/config.toml  |
 | [superfile](./Documents/superfile.md) | [hotkeys.toml](./confFiles/superfile/hotkeys.toml)        | ~/.config/superfile/hotkeys.toml |
 |                                       |                                                           |                                  |
 
@@ -31,14 +32,14 @@
 |                             |                   |                          |
 
 ### Optional
-| name                                  | install way             | description                  |
-| :-:                                   | :-:                     | :-:                          |
-| [yazi](./Documents/yazi.md)           | [yazi](#yazi)           | a console file manager       |
-| [superfile](./Documents/superfile.md) | [superfile](#superfile) | a super console file manager |
-| [getnf](#getnf)                       | [getnf](#getnf)         | easy to install Nerd Fonts   |
-| [glow](#glow)                         | [glow](#glow)           | a markdown reader            |
-| [ruby](#ruby)                         | [ruby](#ruby)           | install lolcat needed        |
-|                                       |                         |                              |
+| name                                  | install way             | description                      |
+| :-:                                   | :-:                     | :-:                              |
+| [yazi](./Documents/yazi.md)           | [yazi](#yazi)           | a console file manager           |
+| [superfile](./Documents/superfile.md) | [superfile](#superfile) | a modernize console file manager |
+| [getnf](#getnf)                       | [getnf](#getnf)         | easy to install Nerd Fonts       |
+| [glow](#glow)                         | [glow](#glow)           | a markdown reader                |
+| [ruby](#ruby)                         | [ruby](#ruby)           | install lolcat needed            |
+|                                       |                         |                                  |
 
 ### Funny
 | name              | install way       | description                  |
