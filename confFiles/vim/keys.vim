@@ -107,7 +107,7 @@ inoremap <C-c> <C-o>yy<C-o>p
 " 不兼容vi模式
 set nocompatible
 " 扩展退格键使用（backspace）
-" set backspace=indent,eol,start
+set backspace=indent,eol,start
 
 " ==============
 " === cursor ===
@@ -122,4 +122,28 @@ let &t_EI = "\<Esc>[2 q"
 " === 光标形状 ===
 " 打开文件时光标自动位于上次退出的位置
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+
+" ==================
+" === better tab ===
+" ==================
+" 换行时自动同步上一行的缩进
+set ai
+" 手动缩进（TAB）自动转换为空格
+set expandtab
+" 设置TAB宽度
+set tabstop=4
+" 设置一级缩进（>>）、取消一级缩进（<<）、自动缩进（==）时每一级的字符数
+set shiftwidth=4
+" 读取文件时TAB转换成空格的数量
+set softtabstop=4
+" === 自动补全功能 ===
+function! CleverTab()
+    if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+        return "\<Tab>"
+    else
+        return "\<C-N>"
+    endif
+endfunction
+inoremap <Tab> <C-R>=CleverTab()<CR>
 

@@ -134,7 +134,6 @@ export PATH=".local:$PATH"
 alias lh="ls -h"
 alias ll="ls -l"
 alias la="ls -a"
-alias ra="ranger"
 alias ya="yazi"
 alias md="glow"
 alias python="python3.10"
@@ -143,8 +142,8 @@ alias pip="pip3.10"
 alias s="/usr/local/bin/show.sh"
 alias imgcat="/usr/local/bin/img2chr.py"
 # vim : more mode
-alias vimk="vim -u ~/.config/vim/keys.vim" # only key-map
-alias vimm="vim -u ~/.config/vim/mini.vim" # mini-vim
+alias vimk="vim -N -u ~/.config/vim/keys.vim" # only key-map
+alias vimm="vim -N -u ~/.config/vim/mini.vim" # mini-vim
 
 # ===
 # === yazi

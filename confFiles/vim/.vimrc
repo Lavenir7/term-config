@@ -109,7 +109,7 @@ inoremap <C-c> <C-o>yy<C-o>p
 " 不兼容vi模式
 set nocompatible
 " 扩展退格键使用（backspace）
-" set backspace=indent,eol,start
+set backspace=indent,eol,start
 
 
 " ================

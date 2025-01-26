@@ -108,7 +108,7 @@ inoremap <C-c> <C-o>yy<C-o>p
 " 不兼容vi模式
 set nocompatible
 " 扩展退格键使用（backspace）
-" set backspace=indent,eol,start
+set backspace=indent,eol,start
 
 
 " ================
@@ -136,7 +136,7 @@ set encoding=utf-8
 " === display ===
 " ===============
 " 主题配色方案
-" colorscheme industry
+colorscheme industry
 " 语法高亮
 syntax on
 " 显示行数
