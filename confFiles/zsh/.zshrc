@@ -135,6 +135,7 @@ alias lh="ls -h"
 alias ll="ls -l"
 alias la="ls -a"
 alias ya="yazi"
+alias sf="spf"
 alias md="glow"
 alias python="python3.10"
 alias pip="pip3.10"
@@ -155,6 +156,31 @@ function y() {
 		builtin cd -- "$cwd"
 	fi
 	rm -f -- "$tmp"
+}
+
+# ===
+# === superfile
+# ===
+# change "cd_on_quit" to "true" on ~/.config/superfile/config.toml
+function f() {
+    os=$(uname -s)
+
+    # Linux
+    if [[ "$os" == "Linux" ]]; then
+        export SPF_LAST_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/superfile/lastdir"
+    fi
+
+    # macOS
+    if [[ "$os" == "Darwin" ]]; then
+        export SPF_LAST_DIR="$HOME/Library/Application Support/superfile/lastdir"
+    fi
+
+    command spf "$@"
+
+    [ ! -f "$SPF_LAST_DIR" ] || {
+        . "$SPF_LAST_DIR"
+        rm -f -- "$SPF_LAST_DIR" > /dev/null
+    }
 }
 
 # ===
