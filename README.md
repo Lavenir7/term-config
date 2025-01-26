@@ -4,16 +4,17 @@
 
 ## Config Files
 
-| name                            | config file                                               | path to storage             |
-| :-:                             | :-:                                                       | :-:                         |
-| [tmux](./Documents/tmux.md)     | [tmux.conf](./confFiles/tmux/tmux.conf)                   | ~/.conf/tmux/tmux.conf      |
-| [zsh](./Documents/zsh.md)       | [.zshrc](./confFiles/zsh/.zshrc)                          | ~/.zshrc                    |
-| [vim](./Documents/vim.md)       | [.vimrc](./confFiles/vim/.vimrc)                          | ~/.vimrc                    |
-| [vimk](./Documents/vim.md)      | [keys.vim](./confFiles/vim/keys.vim)                      | ~/.conf/vim/keys.vim        |
-| [vimm](./Documents/vim.md)      | [mini.vim](./confFiles/vim/mini.vim)                      | ~/.conf/vim/mini.vim        |
-| [coc](./Documents/coc.md)       | [coc-settings.json](./confFiles/vim/coc-settings.json)    | ~/.vim/coc-settings.json    |
-| [termux](./Documents/termux.md) | [termux.properties](./confFiles/termux/termux.properties) | ~/.termux/termux.properties |
-|                                 |                                                           |                             |
+| name                                  | config file                                               | path to storage                  |
+| :-:                                   | :-:                                                       | :-:                              |
+| [tmux](./Documents/tmux.md)           | [tmux.conf](./confFiles/tmux/tmux.conf)                   | ~/.conf/tmux/tmux.conf           |
+| [zsh](./Documents/zsh.md)             | [.zshrc](./confFiles/zsh/.zshrc)                          | ~/.zshrc                         |
+| [vim](./Documents/vim.md)             | [.vimrc](./confFiles/vim/.vimrc)                          | ~/.vimrc                         |
+| [vimk](./Documents/vim.md)            | [keys.vim](./confFiles/vim/keys.vim)                      | ~/.conf/vim/keys.vim             |
+| [vimm](./Documents/vim.md)            | [mini.vim](./confFiles/vim/mini.vim)                      | ~/.conf/vim/mini.vim             |
+| [coc](./Documents/coc.md)             | [coc-settings.json](./confFiles/vim/coc-settings.json)    | ~/.vim/coc-settings.json         |
+| [termux](./Documents/termux.md)       | [termux.properties](./confFiles/termux/termux.properties) | ~/.termux/termux.properties      |
+| [superfile](./Documents/superfile.md) | [hotkeys.toml](./confFiles/superfile/hotkeys.toml)        | ~/.config/superfile/hotkeys.toml |
+|                                       |                                                           |                                  |
 
 > You can run [this shell script](./autoConfig/placeConfigFiles.sh) to automatically place the config files.
 
@@ -115,6 +116,13 @@ cd term-config-files/superfile/
 - install online
 ```sh
 bash -c "$(curl -sLo- https://superfile.netlify.app/install.sh)"
+```
+- fonts-needed
+see this: [Nerd-Font install](./Documents/nerdfont.md)
+
+- uninstall
+```sh
+rm -rf /usr/local/bin/spf ~/.config/superfile
 ```
 
 ### getnf

@@ -1,0 +1,65 @@
+
+#  ____                         __ _ _        _   _       _   _                  
+# / ___| _   _ _ __   ___ _ __ / _(_) | ___  | | | | ___ | |_| | _____ _   _ ___ 
+# \___ \| | | | '_ \ / _ \ '__| |_| | |/ _ \ | |_| |/ _ \| __| |/ / _ \ | | / __|
+#  ___) | |_| | |_) |  __/ |  |  _| | |  __/ |  _  | (_) | |_|   <  __/ |_| \__ \
+# |____/ \__,_| .__/ \___|_|  |_| |_|_|\___| |_| |_|\___/ \__|_|\_\___|\__, |___/
+#             |_|                                                      |___/     
+
+# =================================================================================================
+# Global hotkeys (cannot conflict with other hotkeys)
+confirm = ['enter', 'l', '']
+quit = ['esc', 'ctrl+c', 'q', '']
+# movement
+list_up = ['k', '']
+list_down = ['j', '']
+page_up = ['pgup', '']
+page_down = ['pgdown', '']
+# file panel control
+create_new_file_panel = ['N', 'ctrl+n', '']
+close_file_panel = ['ctrl+d', '']
+next_file_panel = ['L', 'tab', '']
+previous_file_panel = ['H', 'shift+tab', '']
+toggle_file_preview_panel = ['=', '']
+open_sort_options_menu = ['s', '']
+toggle_reverse_sort = ['S', '']
+# change focus
+focus_on_process_bar = ['ctrl+p', 'z', '']
+focus_on_sidebar = ['ctrl+s', 'u', '']
+focus_on_metadata = ['ctrl+m', 'm', '']
+# create file/directory and rename
+file_panel_item_create = ['o', 'a', '']
+file_panel_item_rename = ['r', 'c', '']
+# file operations
+copy_items = ['y', '']
+cut_items = ['x', '']
+paste_items = ['p', '']
+delete_items = ['d', 'delete', '']
+# compress and extract
+extract_file = ['ctrl+e', '']
+compress_file = ['ctrl+a', '']
+# editor
+open_file_with_editor = ['i', 'e', '']
+open_current_directory_with_editor = ['I', 'E', '']
+# other
+pinned_directory = ['`', '']
+toggle_dot_file = ['.', ',', '']
+change_panel_mode = ['v', 'V', '']
+open_help_menu = ['?', '']
+open_command_line = [':', '']
+copy_path = ['ctrl+y', '']
+copy_present_working_directory = ['Y', '']
+toggle_footer = ['-', '']
+# =================================================================================================
+# Typing hotkeys (can conflict with all hotkeys)
+confirm_typing = ['enter', '']
+cancel_typing = ['ctrl+c', 'esc', '']
+# =================================================================================================
+# Normal mode hotkeys (can conflict with other modes, cannot conflict with global hotkeys)
+parent_directory = ['h', '']
+search_bar = ['/', '']
+# =================================================================================================
+# Select mode hotkeys (can conflict with other modes, cannot conflict with global hotkeys)
+file_panel_select_mode_items_select_down = ['J', '']
+file_panel_select_mode_items_select_up = ['K', '']
+file_panel_select_all_items = ['A', '']
