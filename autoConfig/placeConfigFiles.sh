@@ -1,17 +1,18 @@
 #!/bin/bash
 
 # config files
-rcfile=("tmux.conf"
-".zshrc"
-".vimrc"
-"ranger.conf"
-"coc-settings.json")
+rcfile=("tmux/tmux.conf"
+"zsh/.zshrc"
+"vim/.vimrc"
+"vim/keys.vim"
+"vim/mini.vim"
+"vim/coc-settings.json")
 
 # path to store config files
 path_to_store=("${HOME}/.conf/tmux"
 "${HOME}"
 "${HOME}"
-"${HOME}/.conf/ranger
+"${HOME}/.conf/vim"
 "${HOME}/.vim")
 
 # colors

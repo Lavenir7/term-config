@@ -142,6 +142,9 @@ alias pip="pip3.10"
 # my script [ self-defined ]
 alias s="/usr/local/bin/show.sh"
 alias imgcat="/usr/local/bin/img2chr.py"
+# vim : more mode
+alias vimk="vim -u ~/.config/vim/keys.vim" # only key-map
+alias vimm="vim -u ~/.config/vim/mini.vim" # mini-vim
 
 # ===
 # === yazi

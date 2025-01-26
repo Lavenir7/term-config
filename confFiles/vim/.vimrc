@@ -56,6 +56,8 @@ noremap <C-h> :set nohls!<CR>
 noremap <LEADER><LEADER> <Esc>/<++><CR>:nohls<CR>c4l
 " ts : tab to space
 noremap ts :%s/\t/    /gc<CR>
+" <Space>rn : rename
+nnoremap <LEADER>rn :%s/<C-R><C-W>/<C-R><C-W>/gc<Left><Left><Left>
 
 " 文件多开
 " 标签页
@@ -155,7 +157,7 @@ set cursorline
 " 突出显示当前列
 " set cursorcolumn
 " 不显示特殊字符
-set list
+set nolist
 " 设置特殊字符显示（tab：TAB，space：空格，trail：痕迹/空格拖尾，eol：行尾）
 set listchars=tab:▏\ ,space:∷,trail:༶,eol:\ 
 " 设置特殊字符颜色
@@ -309,6 +311,8 @@ Plug 'junegunn/gv.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 Plug 'vimwiki/vimwiki'
+" AI
+Plug 'Lavenir7/vim-deepseek'
 
 call plug#end()
 
@@ -373,8 +377,6 @@ let g:jedi#documentation_command = "D"
 let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#rename_command = "<leader>r"
-
-" test line === end
 
 " ===
 " === vim-gitgutter
@@ -547,5 +549,5 @@ function! s:show_documentation()
     endif
 endfunction
 " 重命名变量
-nnoremap <LEADER>rn <Plug>(coc-rename)
+" nnoremap <LEADER>rn <Plug>(coc-rename)
 

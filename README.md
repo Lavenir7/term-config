@@ -4,15 +4,16 @@
 
 ## Config Files
 
-| name                            | config file                                        | path to storage             |
-| :-:                             | :-:                                                | :-:                         |
-| [tmux](./Documents/tmux.md)     | [tmux.conf](./confFiles/tmux.conf)                 | ~/.conf/tmux/tmux.conf      |
-| [zsh](./Documents/zsh.md)       | [.zshrc](./confFiles/.zshrc)                       | ~/.zshrc                    |
-| [vim](./Documents/vim.md)       | [.vimrc](./confFiles/.vimrc)                       | ~/.vimrc                    |
-| [coc](./Documents/coc.md)       | [coc-settings.json](./confFiles/coc-settings.json) | ~/.vim/coc-settings.json    |
-| [termux](./Documents/termux.md) | [termux.properties](./confFiles/termux.properties) | ~/.termux/termux.properties |
-| [ranger](./Documents/ranger.md) | [rc.conf](./confFiles/rc.conf)                     | ~/.conf/ranger/rc.conf      |
-|                                 |                                                    |                             |
+| name                            | config file                                               | path to storage             |
+| :-:                             | :-:                                                       | :-:                         |
+| [tmux](./Documents/tmux.md)     | [tmux.conf](./confFiles/tmux/tmux.conf)                   | ~/.conf/tmux/tmux.conf      |
+| [zsh](./Documents/zsh.md)       | [.zshrc](./confFiles/zsh/.zshrc)                          | ~/.zshrc                    |
+| [vim](./Documents/vim.md)       | [.vimrc](./confFiles/vim/.vimrc)                          | ~/.vimrc                    |
+| [vimk](./Documents/vim.md)      | [keys.vim](./confFiles/vim/keys.vim)                      | ~/.conf/vim/keys.vim        |
+| [vimm](./Documents/vim.md)      | [mini.vim](./confFiles/vim/mini.vim)                      | ~/.conf/vim/mini.vim        |
+| [coc](./Documents/coc.md)       | [coc-settings.json](./confFiles/vim/coc-settings.json)    | ~/.vim/coc-settings.json    |
+| [termux](./Documents/termux.md) | [termux.properties](./confFiles/termux/termux.properties) | ~/.termux/termux.properties |
+|                                 |                                                           |                             |
 
 > You can run [this shell script](./autoConfig/placeConfigFiles.sh) to automatically place the config files.
 
@@ -31,7 +32,7 @@
 ### Optional
 | name              | description                |
 | :-:               | :-:                        |
-| [ranger](#ranger) | a console file manager     |
+| [yazi](#yazi)     | a console file manager     |
 | [getnf](#getnf)   | easy to install Nerd Fonts |
 | [glow](#glow)     | a markdown reader          |
 | [ruby](#ruby)     | install lolcat needed                |
@@ -76,11 +77,6 @@ $ sudo apt-get install ruby
 ### nodejs
 ```sh
 $ sudo apt-get install nodejs
-```
-
-### ranger
-```sh
-$ sudo apt-get install ranger
 ```
 
 ### getnf
