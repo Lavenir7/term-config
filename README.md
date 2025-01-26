@@ -84,8 +84,8 @@ sudo apt-get install nodejs
 
 - get the zip-file
 ```sh
-# yazi.zip already download in /path/to/term-config/files/yazi/yazi.zip (download date: 2025-01-26)
-cp /path/to/term-config/files/yazi/yazi.zip .
+# yazi.zip already download in https://github.com/Lavenir7/term-config-files/yazi/yazi.zip (download date: 2025-01-26)
+cp https://github.com/Lavenir7/term-config-files/yazi/yazi.zip .
 # or you can download online
 curl -fLo yazi.zip https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip
 ```
@@ -97,14 +97,18 @@ sudo mv yazi-temp/*/yazi /usr/local/bin # then you can use yazi
 rm -rf yazi-temp yazi.zip
 ```
 
+- fonts-needed
+see this: [Nerd-Font install](./Documents/nerdfont.md)
+
 ### superfile
 
 - install by local-file
 > [!warning]
-> superfile's files already download in /path/to/term-config/files/superfile/* (download date: 2025-01-26)
+> superfile's files already download in https://github.com/Lavenir7/term-config-files/superfile/* (download date: 2025-01-26)
 > and I have changed the install-file for use local-file
 ```sh
-cd /path/to/term-config/files/superfile/
+git clone https://github.com/Lavenir7/term-config-files
+cd term-config-files/superfile/
 ./install.sh
 ```
 

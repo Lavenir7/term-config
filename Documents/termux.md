@@ -1,3 +1,3 @@
 # termux
 
-just for termux (a terminal on Android)
+> a terminal on Android

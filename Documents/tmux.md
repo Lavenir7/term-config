@@ -2,7 +2,7 @@
 
 ## install
 ```sh
-$ sudo apt-get install tmux
+sudo apt-get install tmux
 ```
 
 ## config
