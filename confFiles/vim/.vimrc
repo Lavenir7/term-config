@@ -385,12 +385,12 @@ let g:jedi#rename_command = "<leader>r"
 noremap gt :GitGutter
 set signcolumn=yes " keep gitgutter sign column on
 " " --- Sign
-" " signs (<= 2)
+" " signs (<= 2) ┆
 let g:gitgutter_sign_added = ''
-let g:gitgutter_sign_modified = '░'
+let g:gitgutter_sign_modified = '▒'
 let g:gitgutter_sign_removed = '﹏'
 let g:gitgutter_sign_removed_first_line = '▔'
-let g:gitgutter_sign_removed_above_and_below = '┆'
+let g:gitgutter_sign_removed_above_and_below = ''
 let g:gitgutter_sign_modified_removed = '▒'
 " " colors
 " highlight GitGutterAdd guifg=#009900 ctermfg=2
@@ -443,8 +443,8 @@ let g:VM_theme = 'iceblue'
 " ===
 " === vim-translator
 " ===
-nnoremap <silent> <LEADER>tt :TranslateW --engines=bing<CR>
-vnoremap <silent> <LEADER>tt :TranslateW --engines=bing<CR>
+nnoremap <silent> <LEADER>tt :TranslateW --engines=bing,youdao<CR>
+vnoremap <silent> <LEADER>tt :TranslateW --engines=bing,youdao<CR>
 
 " ===
 " === NERDTree
@@ -551,3 +551,8 @@ endfunction
 " 重命名变量
 " nnoremap <LEADER>rn <Plug>(coc-rename)
 
+" ===
+" === vim-deepseek
+" ===
+let g:deepseek_api_key = ''
+let g:deepseek_model = 'dsV3'
