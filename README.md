@@ -32,13 +32,15 @@
 |                             |                   |                          |
 
 ### Optional
-| name                                  | install way             | description                      |
-| :-:                                   | :-:                     | :-:                              |
-| [yazi](./Documents/yazi.md)           | [yazi](#yazi)           | a console file manager           |
+|                 name                  |       install way       |           description            |
+| :-----------------------------------: | :---------------------: | :------------------------------: |
+|      [yazi](./Documents/yazi.md)      |      [yazi](#yazi)      |      a console file manager      |
 | [superfile](./Documents/superfile.md) | [superfile](#superfile) | a modernize console file manager |
-| [getnf](#getnf)                       | [getnf](#getnf)         | easy to install Nerd Fonts       |
-| [glow](#glow)                         | [glow](#glow)           | a markdown reader                |
-| [ruby](#ruby)                         | [ruby](#ruby)           | install lolcat needed            |
+|            [getnf](#getnf)            |     [getnf](#getnf)     |    easy to install Nerd Fonts    |
+|             [glow](#glow)             |      [glow](#glow)      |        a markdown reader         |
+|             [ruby](#ruby)             |      [ruby](#ruby)      |      install lolcat needed       |
+|          [img2chr](#img2chr)          |   [img2chr](#img2chr)   |       show images by chars       |
+|               [wd](#wd)               |        [wd](#wd)        |      a translator by youdao      |
 |                                       |                         |                                  |
 
 ### Funny
@@ -70,11 +72,6 @@ sudo apt-get install vim
 ### git
 ```sh
 sudo apt-get install git
-```
-
-### ruby
-```sh
-sudo apt-get install ruby
 ```
 
 ### nodejs
@@ -140,7 +137,30 @@ sudo apt update && sudo apt install glow
 ```
 More install way see here: [charmbracelet/glow](https://github.com/charmbracelet/glow)
 
+### ruby
+
+```sh
+sudo apt-get install ruby
+```
+
+### img2chr
+
+```sh
+cd ~
+git clone https://github.com/Lavenir7/term-config-files
+cp term-config-files/scripts/img2chr ~/.local/bin
+```
+
+### wd
+
+```sh
+cd ~
+git clone https://github.com/Lavenir7/term-config-files
+cp term-config-files/scripts/wd ~/.local/bin
+```
+
 ### figlet
+
 ```sh
 sudo apt-get install figlet
 ```
@@ -177,5 +197,4 @@ sudo apt-get install sl
 ```sh
 sudo apt-get install cowsay
 ```
-
 

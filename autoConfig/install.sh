@@ -4,5 +4,6 @@
 
 # But I don't have time to write it...
 
-printf "this script is empty\n"
+./install_apps.sh
 
+./placeConfigFiles.sh
