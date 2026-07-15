@@ -306,13 +306,13 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc [ not only for complete ]
 " Git
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 Plug 'vimwiki/vimwiki'
 " AI
-Plug 'Lavenir7/vim-deepseek'
+" Plug 'Lavenir7/vim-deepseek'
 
 call plug#end()
 
@@ -554,5 +554,5 @@ endfunction
 " ===
 " === vim-deepseek
 " ===
-let g:deepseek_api_key = ''
-let g:deepseek_model = 'dsV3'
+" let g:deepseek_api_key = ''
+" let g:deepseek_model = 'dsV3'

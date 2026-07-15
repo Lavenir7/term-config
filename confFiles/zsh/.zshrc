@@ -140,8 +140,9 @@ alias md="glow"
 alias python="python3.10"
 alias pip="pip3.10"
 # my script [ self-defined ]
-alias s="/usr/local/bin/show.sh"
-alias imgcat="/usr/local/bin/img2chr.py"
+alias s="~/.local/bin/show.sh"
+alias imgcat="~/.local/bin/img2chr"
+alias wd="~/.local/bin/wd"
 # vim : more mode
 alias vimk="vim -N -u ~/.config/vim/keys.vim" # only key-map
 alias vimm="vim -N -u ~/.config/vim/mini.vim" # mini-vim
