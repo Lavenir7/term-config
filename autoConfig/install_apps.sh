@@ -609,16 +609,50 @@ configure_zsh() {
 }
 
 install_tmux() { install_apt_app tmux tmux required; }
+
 install_zsh() {
     install_apt_app zsh zsh required || return 1
     configure_zsh
 }
+
 install_vim() { install_apt_app vim vim required; }
 install_git() { install_apt_app git git required; }
+
 install_nodejs() {
-    install_apt_app nodejs nodejs required || return 1
-    install_apt_app npm npm required
+    local -a setup_command=(bash -)
+
+    if [[ ${AUTO_YES} -eq 1 ]] \
+        && [[ -n "$(apt_installed_version nodejs)" ]]; then
+        log '-y 模式不更新已存在的 nodejs。'
+        add_result EXISTING_APPS 'nodejs（未更新）'
+        return 0
+    fi
+
+    if ! install_apt_dependency curl; then
+        add_result FAILED_APPS 'nodejs（curl 安装失败）'
+        return 1
+    fi
+
+    if [[ ${EUID} -ne 0 ]]; then
+        if ! command -v sudo >/dev/null 2>&1; then
+            add_result FAILED_APPS 'nodejs（需要 sudo 权限）'
+            return 1
+        fi
+        setup_command=(sudo -E bash -)
+    fi
+
+    log '配置 NodeSource Node.js 24.x 软件源...'
+    if ! curl -fsSL https://deb.nodesource.com/setup_24.x \
+        | "${setup_command[@]}"; then
+        add_result FAILED_APPS 'nodejs（NodeSource 软件源配置失败）'
+        return 1
+    fi
+
+    # NodeSource 脚本修改了软件源，需要重新读取 APT 索引。
+    APT_UPDATED=0
+    install_apt_app nodejs nodejs required
 }
+
 install_ruby() { install_apt_app ruby ruby recommended; }
 install_figlet() { install_apt_app figlet figlet recommended; }
 install_sl() { install_apt_app sl sl recommended; }
