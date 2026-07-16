@@ -8,6 +8,7 @@ TERM_CONFIG_FILES_DIR="${TERM_CONFIG_FILES_DIR:-${HOME}/term-config-files}"
 readonly LOCAL_BIN="${HOME}/.local/bin"
 
 APT_UPDATED=0
+AUTO_YES=0
 
 declare -a INSTALLED_APPS=()
 declare -a UPDATED_APPS=()
@@ -48,11 +49,41 @@ remove_result() {
     result_array=("${kept[@]}")
 }
 
+usage() {
+    printf '用法: %s [-y|--yes]\n' "${0##*/}"
+    printf '  -y, --yes  安装所有未安装的应用；已存在的应用不更新。\n'
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -y|--yes)
+                AUTO_YES=1
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                warn "未知参数: $1"
+                usage >&2
+                exit 2
+                ;;
+        esac
+        shift
+    done
+}
+
 ask_yes_no() {
     local prompt=$1
     local default_answer=${2:-N}
     local answer
     local hint='[y/N]'
+
+    if [[ ${AUTO_YES} -eq 1 ]]; then
+        log "${prompt} 自动选择: y"
+        return 0
+    fi
 
     [[ "${default_answer}" == 'Y' ]] && hint='[Y/n]'
 
@@ -72,6 +103,13 @@ ask_choice() {
     shift
     local choice
     local valid
+
+    if [[ ${AUTO_YES} -eq 1 ]]; then
+        printf '[term-config] %s 自动选择: %s\n' \
+            "${prompt%%$'\\n'*}" "$1" >&2
+        printf '%s\n' "$1"
+        return 0
+    fi
 
     while true; do
         printf '%s\n' "${prompt}" >&2
@@ -169,6 +207,11 @@ install_apt_app() {
 
         printf '%s 当前版本: %s，最新版本: %s。\n' \
             "${app_name}" "${installed_version}" "${candidate_version}"
+        if [[ ${AUTO_YES} -eq 1 ]]; then
+            log "-y 模式不更新已存在的 ${app_name}。"
+            add_result EXISTING_APPS "${app_name}（未更新）"
+            return 0
+        fi
         if ! ask_yes_no "是否更新 ${app_name} 到最新版本？" N; then
             add_result EXISTING_APPS "${app_name}（未更新）"
             return 0
@@ -272,6 +315,11 @@ needs_github_update() {
     local version_args=$3
     local repository=$4
     local current_version
+
+    if [[ ${AUTO_YES} -eq 1 ]]; then
+        log "-y 模式不更新已存在的 ${app_name}。"
+        return 1
+    fi
     local latest_tag
     local latest_version
 
@@ -446,7 +494,10 @@ install_zsh() {
 }
 install_vim() { install_apt_app vim vim required; }
 install_git() { install_apt_app git git required; }
-install_nodejs() { install_apt_app nodejs nodejs required; }
+install_nodejs() {
+    install_apt_app nodejs nodejs required || return 1
+    install_apt_app npm npm required
+}
 install_ruby() { install_apt_app ruby ruby recommended; }
 install_figlet() { install_apt_app figlet figlet recommended; }
 install_sl() { install_apt_app sl sl recommended; }
@@ -825,6 +876,12 @@ install_lolcat() {
 
     installed_version=$(local_gem_version lolcat)
     if [[ -n "${installed_version}" ]]; then
+        if [[ ${AUTO_YES} -eq 1 ]]; then
+            log '-y 模式不更新已存在的 lolcat。'
+            add_result EXISTING_APPS 'lolcat（未更新）'
+            return 0
+        fi
+
         latest_version=$(remote_gem_version lolcat)
         if [[ -n "${latest_version}" ]] \
             && dpkg --compare-versions "${installed_version}" ge "${latest_version}"; then
@@ -889,10 +946,14 @@ print_summary() {
 }
 
 main() {
+    parse_args "$@"
     check_ubuntu
     export PATH="${LOCAL_BIN}:${PATH}"
 
     printf '开始安装 term-config 所需应用。\n'
+    if [[ ${AUTO_YES} -eq 1 ]]; then
+        printf '%s\n' '-y 模式：安装所有未安装项，跳过所有现有应用的更新。'
+    fi
     printf 'term-config-files 默认路径: %s\n' "${TERM_CONFIG_FILES_DIR}"
 
     install_tmux || true

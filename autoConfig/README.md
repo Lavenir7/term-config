@@ -6,7 +6,6 @@
 
 |script|description|
 |:-:|:-:|
-|install.sh|安装应用及配置|
 |install_apps.sh|安装应用|
 |placeConfigFiles.sh|安放配置文件|
 
@@ -39,7 +38,6 @@
 2. 然后安放配置文件 (`placeConfigFiles.sh`)
 
 3. 手动操作：
-    - `chsh -s $(which zsh)` 或 `chsh -s zsh` 设置 zsh 为默认 shell；
 
     - 重启终端；
 
@@ -51,6 +49,10 @@
         - 个人 zsh 主题配置：
             ![zsh_theme_config](../imgs/zsh_theme_config.png)
 
-    - `vim` 打开 vim，自动安装 vim 插件；
+    - `vim` 打开 vim，自动安装 vim 插件
+    
+        - 若安装超时，则重新打开 vim，输入 `:PlugInstall` 重新安装 vim 插件；
 
-    - `vim` 打开 vim，输入 `:PlugInstall` 安装 vim-coc 插件；
+        - 若存在其他安装错误，请检查 `~/.vimrc` 配置文件，删除存在错误的插件或自行解决；
+
+    - 在安装完 `coc.nvim` 插件后，打开 vim，自动安装 coc.nvim 插件；
