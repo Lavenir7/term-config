@@ -22,35 +22,35 @@
 
 ## Software
 ### Required
-| name                        | install way       | description              |
-| :-:                         | :-:               | :-:                      |
-| [tmux](./Documents/tmux.md) | [tmux](#tmux)     | terminal multiplexer     |
-| [zsh](./Documents/zsh.md)   | [zsh](#zsh)       | a shell                  |
-| [vim](./Documents/vim.md)   | [vim](#vim)       | a editor                 |
-| [git](#git)                 | [git](#git)       | a version control tool   |
-| [nodejs](#nodejs)           | [nodejs](#nodejs) | vim plugin -- coc needed |
-|                             |                   |                          |
+|            name             |    install way    |           command            |       description        |
+| :-------------------------: | :---------------: | :--------------------------: | :----------------------: |
+| [tmux](./Documents/tmux.md) |   [tmux](#tmux)   |            `tmux`            |   terminal multiplexer   |
+|  [zsh](./Documents/zsh.md)  |    [zsh](#zsh)    |            `zsh`             |         a shell          |
+|  [vim](./Documents/vim.md)  |    [vim](#vim)    | `vi` / `vim`, `vimk`, `vimm` |         a editor         |
+|         [git](#git)         |    [git](#git)    |            `git`             |  a version control tool  |
+|      [nodejs](#nodejs)      | [nodejs](#nodejs) |       `nodejs`, `npm`        | vim plugin -- coc needed |
+|                             |                   |                              |                          |
 
 ### Optional
-|                 name                  |       install way       |           description            |
-| :-----------------------------------: | :---------------------: | :------------------------------: |
-|      [yazi](./Documents/yazi.md)      |      [yazi](#yazi)      |      a console file manager      |
-| [superfile](./Documents/superfile.md) | [superfile](#superfile) | a modernize console file manager |
-|            [getnf](#getnf)            |     [getnf](#getnf)     |    easy to install Nerd Fonts    |
-|             [glow](#glow)             |      [glow](#glow)      |        a markdown reader         |
-|             [ruby](#ruby)             |      [ruby](#ruby)      |      install lolcat needed       |
-|          [img2chr](#img2chr)          |   [img2chr](#img2chr)   |       show images by chars       |
-|               [wd](#wd)               |        [wd](#wd)        |      a translator by youdao      |
-|                                       |                         |                                  |
+|                 name                  |       install way       |       command        |           description            |
+| :-----------------------------------: | :---------------------: | :------------------: | :------------------------------: |
+|      [yazi](./Documents/yazi.md)      |      [yazi](#yazi)      | `y` / `ya` / `yazi`  |      a console file manager      |
+| [superfile](./Documents/superfile.md) | [superfile](#superfile) |  `f` / `sf` / `spf`  | a modernize console file manager |
+|            [getnf](#getnf)            |     [getnf](#getnf)     |       `getnf`        |    easy to install Nerd Fonts    |
+|             [glow](#glow)             |      [glow](#glow)      |    `md` / `glow`     |        a markdown reader         |
+|             [ruby](#ruby)             |      [ruby](#ruby)      |        `ruby`        |      install lolcat needed       |
+|          [img2chr](#img2chr)          |   [img2chr](#img2chr)   | `imgcat` / `img2chr` |       show images by chars       |
+|               [wd](#wd)               |        [wd](#wd)        |         `wd`         |      a translator by youdao      |
+|                                       |                         |                      |                                  |
 
 ### Funny
-| name              | install way       | description                  |
-| :-:               | :-:               | :-:                          |
-| [figlet](#figlet) | [figlet](#figlet) | a ASCII art                  |
-| [lolcat](#lolcat) | [lolcat](#lolcat) | a colorful printer           |
-| [sl](#sl)         | [sl](#sl)         | a train is running           |
-| [cowsay](#cowsay) | [cowsay](#cowsay) | a cow is saying something... |
-|                   |                   |                              |
+|       name        |    install way    | command  |         description          |
+| :---------------: | :---------------: | :------: | :--------------------------: |
+| [figlet](#figlet) | [figlet](#figlet) | `figlet` |         a ASCII art          |
+| [lolcat](#lolcat) | [lolcat](#lolcat) | `lolcat` |      a colorful printer      |
+|     [sl](#sl)     |     [sl](#sl)     |   `sl`   |      a train is running      |
+| [cowsay](#cowsay) | [cowsay](#cowsay) | `cowsay` | a cow is saying something... |
+|                   |                   |          |                              |
 
 ## Install (Ubuntu24.04 available)
 
