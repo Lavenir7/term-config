@@ -10,6 +10,11 @@ readonly LOCAL_BIN="${HOME}/.local/bin"
 APT_UPDATED=0
 AUTO_YES=0
 
+readonly YELLOW=$'\033[0;33m'
+readonly GREEN=$'\033[0;32m'
+readonly RED=$'\033[0;31m'
+readonly NORMAL=$'\033[0m'
+
 declare -a INSTALLED_APPS=()
 declare -a UPDATED_APPS=()
 declare -a EXISTING_APPS=()
@@ -21,7 +26,15 @@ log() {
 }
 
 warn() {
-    printf '[term-config] WARNING: %s\n' "$*" >&2
+    printf '%s[term-config] WARNING: %s%s\n' "${YELLOW}" "$*" "${NORMAL}" >&2
+}
+
+error() {
+    printf '%s[term-config] ERROR: %s%s\n' "${RED}" "$*" "${NORMAL}" >&2
+}
+
+success() {
+    printf '%s[term-config] %s%s\n' "${GREEN}" "$*" "${NORMAL}"
 }
 
 add_result() {
@@ -34,6 +47,16 @@ add_result() {
         [[ "${item}" == "${value}" ]] && return 0
     done
     result_array+=("${value}")
+
+    case "${array_name}" in
+        INSTALLED_APPS) success "安装成功: ${value}" ;;
+        UPDATED_APPS) success "更新成功: ${value}" ;;
+        EXISTING_APPS) log "已存在或无需处理: ${value}" ;;
+        SKIPPED_APPS)
+            printf '%s[term-config] 已跳过: %s%s\n'                 "${YELLOW}" "${value}" "${NORMAL}"
+            ;;
+        FAILED_APPS) error "${value}" ;;
+    esac
 }
 
 remove_result() {
@@ -88,12 +111,12 @@ ask_yes_no() {
     [[ "${default_answer}" == 'Y' ]] && hint='[Y/n]'
 
     while true; do
-        read -r -p "${prompt} ${hint} " answer || return 1
+        read -r -p "${YELLOW}${prompt} ${hint}${NORMAL} " answer || return 1
         answer=${answer:-${default_answer}}
         case "${answer}" in
             y|Y|yes|YES|Yes) return 0 ;;
             n|N|no|NO|No) return 1 ;;
-            *) printf '请输入 y 或 n。\n' ;;
+            *) printf '%s请输入 y 或 n。%s\n' "${YELLOW}" "${NORMAL}" ;;
         esac
     done
 }
@@ -105,22 +128,79 @@ ask_choice() {
     local valid
 
     if [[ ${AUTO_YES} -eq 1 ]]; then
-        printf '[term-config] %s 自动选择: %s\n' \
-            "${prompt%%$'\\n'*}" "$1" >&2
+        printf '%s[term-config] %s 自动选择: %s%s\n' \
+            "${YELLOW}" "${prompt%%$'\\n'*}" "$1" "${NORMAL}" >&2
         printf '%s\n' "$1"
         return 0
     fi
 
     while true; do
-        printf '%s\n' "${prompt}" >&2
-        read -r -p '请输入选项编号: ' choice || return 1
+        printf '%s%s%s\n' "${YELLOW}" "${prompt}" "${NORMAL}" >&2
+        read -r -p "${YELLOW}请输入选项编号: ${NORMAL}" choice || return 1
         for valid in "$@"; do
             if [[ "${choice}" == "${valid}" ]]; then
                 printf '%s\n' "${choice}"
                 return 0
             fi
         done
-        printf '无效选项，请重新输入。\n' >&2
+        printf '%s无效选项，请重新输入。%s\n' "${YELLOW}" "${NORMAL}" >&2
+    done
+}
+
+ask_install_failure_action() {
+    local app_name=$1
+    local answer
+
+    while true; do
+        printf '\n%s%s 安装失败。%s\n'             "${RED}" "${app_name}" "${NORMAL}" >&2
+        printf '%s请选择：%s\n' "${YELLOW}" "${NORMAL}" >&2
+        printf '%s  y. 重新尝试安装该应用%s\n' "${YELLOW}" "${NORMAL}" >&2
+        printf '%s  n. 不安装该应用，继续安装其他应用%s\n' "${YELLOW}" "${NORMAL}" >&2
+        printf '%s  q. 退出安装脚本%s\n' "${YELLOW}" "${NORMAL}" >&2
+        read -r -p "${YELLOW}请输入 y、n 或 q: ${NORMAL}" answer || answer=n
+
+        case "${answer}" in
+            y|Y) printf 'retry\n'; return 0 ;;
+            n|N) printf 'continue\n'; return 0 ;;
+            q|Q) printf 'quit\n'; return 0 ;;
+            *) printf '%s请输入 y、n 或 q。%s\n' "${YELLOW}" "${NORMAL}" >&2 ;;
+        esac
+    done
+}
+
+restore_failed_results() {
+    local previous_count=$1
+    FAILED_APPS=("${FAILED_APPS[@]:0:${previous_count}}")
+}
+
+install_with_retry() {
+    local app_name=$1
+    local install_function=$2
+    shift 2
+
+    local failed_count
+    local action
+
+    while true; do
+        failed_count=${#FAILED_APPS[@]}
+
+        if "${install_function}" "$@"; then
+            return 0
+        fi
+
+        action=$(ask_install_failure_action "${app_name}")
+        case "${action}" in
+            retry)
+                restore_failed_results "${failed_count}"
+                ;;
+            continue)
+                return 1
+                ;;
+            quit)
+                print_summary
+                exit 1
+                ;;
+        esac
     done
 }
 
@@ -137,14 +217,14 @@ run_as_root() {
 
 check_ubuntu() {
     if [[ ! -r /etc/os-release ]]; then
-        printf '无法识别操作系统；此脚本仅支持 Ubuntu。\n' >&2
+        error '无法识别操作系统；此脚本仅支持 Ubuntu。'
         exit 1
     fi
 
     # shellcheck disable=SC1091
     . /etc/os-release
     if [[ "${ID:-}" != 'ubuntu' ]]; then
-        printf '当前系统不是 Ubuntu；此脚本仅支持 Ubuntu。\n' >&2
+        error '当前系统不是 Ubuntu；此脚本仅支持 Ubuntu。'
         exit 1
     fi
 }
@@ -205,8 +285,8 @@ install_apt_app() {
             return 0
         fi
 
-        printf '%s 当前版本: %s，最新版本: %s。\n' \
-            "${app_name}" "${installed_version}" "${candidate_version}"
+        printf '%s%s 当前版本: %s，最新版本: %s。%s\n' \
+            "${YELLOW}" "${app_name}" "${installed_version}"             "${candidate_version}" "${NORMAL}"
         if [[ ${AUTO_YES} -eq 1 ]]; then
             log "-y 模式不更新已存在的 ${app_name}。"
             add_result EXISTING_APPS "${app_name}（未更新）"
@@ -405,6 +485,8 @@ install_oh_my_zsh_component() {
     local relative_path=$3
     local install_dir
     local target_dir
+    local local_commit
+    local remote_commit
 
     install_dir=$(oh_my_zsh_dir)
     if [[ ! -d "${install_dir}" ]]; then
@@ -413,19 +495,58 @@ install_oh_my_zsh_component() {
         return 1
     fi
 
-    target_dir="$(zsh_custom_dir)/${relative_path}"
-    if [[ -d "${target_dir}" ]]; then
-        log "${app_name} 已存在。"
-        add_result EXISTING_APPS "${app_name}"
-        return 0
-    fi
-
     if ! install_apt_dependency git; then
         add_result FAILED_APPS "${app_name}（git 安装失败）"
         return 1
     fi
-    mkdir -p "$(dirname "${target_dir}")"
 
+    target_dir="$(zsh_custom_dir)/${relative_path}"
+    if [[ -d "${target_dir}" ]]; then
+        if [[ ! -d "${target_dir}/.git" ]]; then
+            warn "${app_name} 已存在，但不是 Git 仓库，无法检查版本。"
+            add_result FAILED_APPS "${app_name}（无法检查版本）"
+            return 1
+        fi
+
+        local_commit=$(git -C "${target_dir}" rev-parse HEAD 2>/dev/null) || {
+            add_result FAILED_APPS "${app_name}（无法读取本地版本）"
+            return 1
+        }
+        remote_commit=$(git ls-remote "${repository}" HEAD 2>/dev/null | awk 'NR == 1 {print $1}') || true
+
+        if [[ -z "${remote_commit}" ]]; then
+            warn "无法获取 ${app_name} 的最新版本。"
+            add_result FAILED_APPS "${app_name}（无法获取最新版本）"
+            return 1
+        fi
+
+        if [[ "${local_commit}" == "${remote_commit}" ]]; then
+            log "${app_name} 已是最新版本。"
+            add_result EXISTING_APPS "${app_name}"
+            return 0
+        fi
+
+        if [[ ${AUTO_YES} -eq 1 ]]; then
+            log "-y 模式不更新已存在的 ${app_name}。"
+            add_result EXISTING_APPS "${app_name}（未更新）"
+            return 0
+        fi
+
+        if ! ask_yes_no "${app_name} 不是最新版本，是否更新？" N; then
+            add_result EXISTING_APPS "${app_name}（未更新）"
+            return 0
+        fi
+
+        if git -C "${target_dir}" pull --ff-only; then
+            add_result UPDATED_APPS "${app_name}"
+            return 0
+        fi
+
+        add_result FAILED_APPS "${app_name}（更新失败）"
+        return 1
+    fi
+
+    mkdir -p "$(dirname "${target_dir}")"
     if git clone "${repository}" "${target_dir}"; then
         add_result INSTALLED_APPS "${app_name}"
     else
@@ -457,31 +578,31 @@ install_powerlevel10k() {
 
 configure_zsh() {
     if ask_yes_no '是否将 zsh 设置为当前用户的默认 Shell？' N; then
-        set_zsh_as_default_shell || true
+        install_with_retry '设置 zsh 为默认 Shell' set_zsh_as_default_shell || true
     else
         add_result SKIPPED_APPS 'zsh（设置默认 Shell）'
     fi
 
     if ask_yes_no '是否安装 Oh My Zsh？' N; then
-        install_oh_my_zsh || true
+        install_with_retry 'Oh My Zsh' install_oh_my_zsh || true
     else
         add_result SKIPPED_APPS 'Oh My Zsh'
     fi
 
     if ask_yes_no '是否安装 Oh My Zsh 的 zsh-autosuggestions 插件？' N; then
-        install_zsh_autosuggestions || true
+        install_with_retry 'zsh-autosuggestions' install_zsh_autosuggestions || true
     else
         add_result SKIPPED_APPS 'zsh-autosuggestions'
     fi
 
     if ask_yes_no '是否安装 Oh My Zsh 的 zsh-syntax-highlighting 插件？' N; then
-        install_zsh_syntax_highlighting || true
+        install_with_retry 'zsh-syntax-highlighting' install_zsh_syntax_highlighting || true
     else
         add_result SKIPPED_APPS 'zsh-syntax-highlighting'
     fi
 
     if ask_yes_no '是否安装 Powerlevel10k 主题？' N; then
-        install_powerlevel10k || true
+        install_with_retry 'Powerlevel10k' install_powerlevel10k || true
     else
         add_result SKIPPED_APPS 'Powerlevel10k'
     fi
@@ -891,8 +1012,8 @@ install_lolcat() {
         fi
 
         if [[ -n "${latest_version}" ]]; then
-            printf 'lolcat 当前版本: %s，最新版本: %s。\n' \
-                "${installed_version}" "${latest_version}"
+            printf '%slolcat 当前版本: %s，最新版本: %s。%s\n' \
+                "${YELLOW}" "${installed_version}" "${latest_version}" "${NORMAL}"
         else
             warn '无法获取 lolcat 的 RubyGems 最新版本。'
         fi
@@ -921,28 +1042,29 @@ install_lolcat() {
 }
 
 print_group() {
-    local title=$1
-    shift
+    local color=$1
+    local title=$2
+    shift 2
     local -a values=("$@")
     local value
 
-    printf '\n%s\n' "${title}"
+    printf '\n%s%s%s\n' "${color}" "${title}" "${NORMAL}"
     if [[ ${#values[@]} -eq 0 ]]; then
         printf '  无\n'
         return 0
     fi
     for value in "${values[@]}"; do
-        printf '  - %s\n' "${value}"
+        printf '%s  - %s%s\n' "${color}" "${value}" "${NORMAL}"
     done
 }
 
 print_summary() {
     printf '\n========== 安装总结 ==========\n'
-    print_group '新安装的应用：' "${INSTALLED_APPS[@]}"
-    print_group '更新的应用：' "${UPDATED_APPS[@]}"
-    print_group '已存在、未安装或未更新的应用：' "${EXISTING_APPS[@]}"
-    print_group '用户跳过的可选安装项：' "${SKIPPED_APPS[@]}"
-    print_group '安装失败的应用：' "${FAILED_APPS[@]}"
+    print_group "${GREEN}" '新安装的应用：' "${INSTALLED_APPS[@]}"
+    print_group "${GREEN}" '更新的应用：' "${UPDATED_APPS[@]}"
+    print_group "${NORMAL}" '已存在、未安装或未更新的应用：' "${EXISTING_APPS[@]}"
+    print_group "${YELLOW}" '用户跳过的可选安装项：' "${SKIPPED_APPS[@]}"
+    print_group "${RED}" '安装失败的应用：' "${FAILED_APPS[@]}"
 }
 
 main() {
@@ -956,23 +1078,23 @@ main() {
     fi
     printf 'term-config-files 默认路径: %s\n' "${TERM_CONFIG_FILES_DIR}"
 
-    install_tmux || true
-    install_zsh || true
-    install_vim || true
-    install_git || true
-    install_nodejs || true
+    install_with_retry tmux install_tmux || true
+    install_with_retry zsh install_zsh || true
+    install_with_retry vim install_vim || true
+    install_with_retry git install_git || true
+    install_with_retry nodejs install_nodejs || true
 
-    install_ruby || true
-    install_img2chr || true
-    install_wd || true
-    install_yazi || true
-    install_superfile || true
-    install_getnf || true
-    install_glow || true
-    install_figlet || true
-    install_lolcat || true
-    install_sl || true
-    install_cowsay || true
+    install_with_retry ruby install_ruby || true
+    install_with_retry img2chr install_img2chr || true
+    install_with_retry wd install_wd || true
+    install_with_retry yazi install_yazi || true
+    install_with_retry superfile install_superfile || true
+    install_with_retry getnf install_getnf || true
+    install_with_retry glow install_glow || true
+    install_with_retry figlet install_figlet || true
+    install_with_retry lolcat install_lolcat || true
+    install_with_retry sl install_sl || true
+    install_with_retry cowsay install_cowsay || true
 
     print_summary
 }
