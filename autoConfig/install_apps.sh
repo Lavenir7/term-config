@@ -147,6 +147,22 @@ ask_choice() {
     done
 }
 
+ask_input_default() {
+    local prompt=$1
+    local default_value=$2
+    local value
+
+    if [[ ${AUTO_YES} -eq 1 ]]; then
+        log "${prompt} 自动选择: ${default_value}"
+        printf '%s\n' "${default_value}"
+        return 0
+    fi
+
+    read -r -p "${YELLOW}${prompt} [${default_value}]: ${NORMAL}" value \
+        || return 1
+    printf '%s\n' "${value:-${default_value}}"
+}
+
 ask_install_failure_action() {
     local app_name=$1
     local answer
@@ -609,17 +625,134 @@ configure_zsh() {
 }
 
 install_tmux() { install_apt_app tmux tmux required; }
-
 install_zsh() {
     install_apt_app zsh zsh required || return 1
     configure_zsh
 }
-
 install_vim() { install_apt_app vim vim required; }
 install_git() { install_apt_app git git required; }
+load_nvm() {
+    export NVM_DIR="${NVM_DIR:-${HOME}/.nvm}"
+    [[ -s "${NVM_DIR}/nvm.sh" ]] || return 1
 
-install_nodejs() {
+    # shellcheck disable=SC1091
+    . "${NVM_DIR}/nvm.sh"
+}
+
+install_nvm() {
+    local latest_tag
+
+    if load_nvm; then
+        log "nvm 已存在于 ${NVM_DIR}。"
+        return 0
+    fi
+
+    if ! install_apt_dependency curl; then
+        add_result FAILED_APPS 'nvm（curl 安装失败）'
+        return 1
+    fi
+
+    latest_tag=$(github_latest_tag nvm-sh/nvm || true)
+    if [[ -z "${latest_tag}" ]]; then
+        warn '无法获取 nvm 最新版本，使用 v0.40.4。'
+        latest_tag='v0.40.4'
+    fi
+
+    log "安装 nvm ${latest_tag}..."
+    if ! curl -fsSL \
+        "https://raw.githubusercontent.com/nvm-sh/nvm/${latest_tag}/install.sh" \
+        | bash; then
+        add_result FAILED_APPS 'nvm（安装失败）'
+        return 1
+    fi
+
+    if ! load_nvm; then
+        add_result FAILED_APPS 'nvm（安装后无法加载）'
+        return 1
+    fi
+}
+
+install_nodejs_with_nvm() {
+    local requested_version
+    local current_version
+    local remote_version
+    local installed_version
+
+    requested_version=$(ask_input_default \
+        '请输入要通过 nvm 安装的 Node.js 版本，推荐 24；也可输入 22、lts/* 等' \
+        24) || return 1
+
+    install_nvm || return 1
+
+    current_version=$(NVM_NO_COLORS=1 nvm version \
+        "${requested_version}" 2>/dev/null || true)
+    remote_version=$(NVM_NO_COLORS=1 nvm version-remote \
+        "${requested_version}" 2>/dev/null || true)
+
+    if [[ -z "${remote_version}" || "${remote_version}" == 'N/A' ]]; then
+        add_result FAILED_APPS \
+            "nodejs（找不到 nvm 版本 ${requested_version}）"
+        return 1
+    fi
+
+    if [[ -n "${current_version}" && "${current_version}" != 'N/A' ]]; then
+        if [[ "${current_version}" == "${remote_version}" ]]; then
+            nvm alias default "${requested_version}" >/dev/null
+            nvm use "${requested_version}" >/dev/null
+            add_result EXISTING_APPS \
+                "nodejs（nvm ${current_version}）"
+            return 0
+        fi
+
+        printf '%snodejs 当前版本: %s，版本 %s 的最新版本: %s。%s\n' \
+            "${YELLOW}" "${current_version}" "${requested_version}" \
+            "${remote_version}" "${NORMAL}"
+
+        if [[ ${AUTO_YES} -eq 1 ]]; then
+            log '-y 模式不更新已存在的 nodejs。'
+            add_result EXISTING_APPS \
+                "nodejs（nvm ${current_version}，未更新）"
+            return 0
+        fi
+
+        if ! ask_yes_no \
+            "是否通过 nvm 更新 nodejs 到 ${remote_version}？" N; then
+            add_result EXISTING_APPS \
+                "nodejs（nvm ${current_version}，未更新）"
+            return 0
+        fi
+    fi
+
+    if ! nvm install "${requested_version}"; then
+        add_result FAILED_APPS \
+            "nodejs（nvm 安装版本 ${requested_version} 失败）"
+        return 1
+    fi
+
+    if ! nvm alias default "${requested_version}" >/dev/null \
+        || ! nvm use "${requested_version}" >/dev/null; then
+        add_result FAILED_APPS 'nodejs（设置 nvm 默认版本失败）'
+        return 1
+    fi
+
+    installed_version=$(node --version 2>/dev/null || true)
+    if [[ -z "${installed_version}" ]] || ! command -v npm >/dev/null 2>&1; then
+        add_result FAILED_APPS 'nodejs（安装后无法使用 node 或 npm）'
+        return 1
+    fi
+
+    if [[ -n "${current_version}" && "${current_version}" != 'N/A' ]]; then
+        add_result UPDATED_APPS "nodejs（nvm ${installed_version}）"
+    else
+        add_result INSTALLED_APPS "nodejs（nvm ${installed_version}）"
+    fi
+}
+
+install_nodejs_direct() {
     local -a setup_command=(bash -)
+
+    printf '%s将通过 NodeSource 直接安装 Node.js 24。%s\n' \
+        "${YELLOW}" "${NORMAL}"
 
     if [[ ${AUTO_YES} -eq 1 ]] \
         && [[ -n "$(apt_installed_version nodejs)" ]]; then
@@ -653,7 +786,24 @@ install_nodejs() {
     install_apt_app nodejs nodejs required
 }
 
-install_ruby() { install_apt_app ruby ruby recommended; }
+install_nodejs() {
+    local method
+
+    if [[ ${AUTO_YES} -eq 1 ]] && command -v node >/dev/null 2>&1; then
+        log '-y 模式不更新已存在的 nodejs。'
+        add_result EXISTING_APPS "nodejs（$(node --version 2>/dev/null)，未更新）"
+        return 0
+    fi
+
+    method=$(ask_choice \
+        $'请选择 nodejs 安装方式：\n  1. 使用 nvm 安装（推荐，可选择 Node.js 版本）\n  2. 使用 NodeSource 直接安装（默认 Node.js 24）' \
+        1 2) || return 1
+
+    case "${method}" in
+        1) install_nodejs_with_nvm ;;
+        2) install_nodejs_direct ;;
+    esac
+}
 install_figlet() { install_apt_app figlet figlet recommended; }
 install_sl() { install_apt_app sl sl recommended; }
 install_cowsay() { install_apt_app cowsay cowsay recommended; }
@@ -1000,12 +1150,13 @@ ensure_ruby_for_lolcat() {
         return 0
     fi
 
-    if ! ask_yes_no 'lolcat 依赖 ruby，是否安装 ruby 并继续？' Y; then
+    log 'lolcat 依赖 ruby，正在自动安装...'
+    if ! install_apt_dependency ruby; then
         return 1
     fi
 
-    remove_result SKIPPED_APPS 'ruby'
-    install_apt_app ruby ruby required
+    command -v ruby >/dev/null 2>&1 \
+        && command -v gem >/dev/null 2>&1
 }
 
 install_lolcat() {
@@ -1025,8 +1176,8 @@ install_lolcat() {
     fi
 
     if ! ensure_ruby_for_lolcat; then
-        add_result SKIPPED_APPS 'lolcat'
-        return 0
+        add_result FAILED_APPS 'lolcat（ruby 依赖安装失败）'
+        return 1
     fi
 
     installed_version=$(local_gem_version lolcat)
@@ -1118,7 +1269,6 @@ main() {
     install_with_retry git install_git || true
     install_with_retry nodejs install_nodejs || true
 
-    install_with_retry ruby install_ruby || true
     install_with_retry img2chr install_img2chr || true
     install_with_retry wd install_wd || true
     install_with_retry yazi install_yazi || true
