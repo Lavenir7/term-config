@@ -17,6 +17,7 @@ source_files=(
     "vim/coc-settings.json"
     "superfile/config.toml"
     "superfile/hotkeys.toml"
+    "pi/keybindings.json"
 )
 
 # 每个文件对应的完整目标路径。
@@ -29,6 +30,7 @@ destination_files=(
     "${HOME}/.vim/coc-settings.json"
     "${HOME}/.config/superfile/config.toml"
     "${HOME}/.config/superfile/hotkeys.toml"
+    "${HOME}/.pi/agent/keybindings.json"
 )
 
 # Colors

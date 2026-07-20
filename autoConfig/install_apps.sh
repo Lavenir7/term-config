@@ -599,25 +599,25 @@ configure_zsh() {
         add_result SKIPPED_APPS 'zsh（设置默认 Shell）'
     fi
 
-    if ask_yes_no '是否安装 Oh My Zsh？' N; then
+    if ask_yes_no 'Oh My Zsh: Zsh 增强版，是否安装？' N; then
         install_with_retry 'Oh My Zsh' install_oh_my_zsh || true
     else
         add_result SKIPPED_APPS 'Oh My Zsh'
     fi
 
-    if ask_yes_no '是否安装 Oh My Zsh 的 zsh-autosuggestions 插件？' N; then
+    if ask_yes_no 'Oh My Zsh 插件 zsh-autosuggestions: 命令行自动补全建议，是否安装？' N; then
         install_with_retry 'zsh-autosuggestions' install_zsh_autosuggestions || true
     else
         add_result SKIPPED_APPS 'zsh-autosuggestions'
     fi
 
-    if ask_yes_no '是否安装 Oh My Zsh 的 zsh-syntax-highlighting 插件？' N; then
+    if ask_yes_no 'Oh My Zsh 插件 zsh-syntax-highlighting: 命令行语法高亮，是否安装？' N; then
         install_with_retry 'zsh-syntax-highlighting' install_zsh_syntax_highlighting || true
     else
         add_result SKIPPED_APPS 'zsh-syntax-highlighting'
     fi
 
-    if ask_yes_no '是否安装 Powerlevel10k 主题？' N; then
+    if ask_yes_no 'Oh My Zsh 主题 Powerlevel10k，是否安装？' N; then
         install_with_retry 'Powerlevel10k' install_powerlevel10k || true
     else
         add_result SKIPPED_APPS 'Powerlevel10k'
@@ -817,7 +817,7 @@ install_img2chr() {
         return 0
     fi
 
-    if ! ask_yes_no 'img2chr 是推荐应用，是否安装？' N; then
+    if ! ask_yes_no 'img2chr: 图片转字符，是否安装？' N; then
         add_result SKIPPED_APPS 'img2chr'
         return 0
     fi
@@ -857,7 +857,7 @@ install_wd() {
         return 0
     fi
 
-    if ! ask_yes_no 'wd 是推荐应用，是否安装？' N; then
+    if ! ask_yes_no 'wd: youdao 查询单词，是否安装？' N; then
         add_result SKIPPED_APPS 'wd'
         return 0
     fi
@@ -964,7 +964,7 @@ install_yazi() {
             return 0
         fi
     else
-        if ! ask_yes_no 'yazi 是推荐应用，是否安装？' N; then
+        if ! ask_yes_no 'yazi: 终端文件管理器，是否安装？' N; then
             add_result SKIPPED_APPS 'yazi'
             return 0
         fi
@@ -1001,6 +1001,166 @@ install_superfile_source() {
     fi
 }
 
+install_pi_ripgrep_dependency() {
+    if ! ask_yes_no 'Pi 需要 ripgrep，是否安装 ripgrep？' Y; then
+        add_result SKIPPED_APPS 'ripgrep（Pi 依赖）'
+        return 0
+    fi
+
+    install_apt_app ripgrep ripgrep required
+}
+
+install_pi_fd_dependency() {
+    local fdfind_path
+
+    if ! ask_yes_no 'Pi 需要 fd，是否安装 fd？' Y; then
+        add_result SKIPPED_APPS 'fd（Pi 依赖）'
+        return 0
+    fi
+
+    if command_exists fd; then
+        log 'fd 已存在。'
+        add_result EXISTING_APPS 'fd'
+        return 0
+    fi
+
+    install_apt_app fd fd-find required || return 1
+
+    if command_exists fd; then
+        return 0
+    fi
+
+    fdfind_path=$(command -v fdfind 2>/dev/null || true)
+    if [[ -z "${fdfind_path}" ]]; then
+        add_result FAILED_APPS 'fd（安装后找不到 fdfind）'
+        return 1
+    fi
+
+    mkdir -p "${LOCAL_BIN}"
+    if ! ln -sfn "${fdfind_path}" "${LOCAL_BIN}/fd"; then
+        add_result FAILED_APPS 'fd（创建 fd 命令软链接失败）'
+        return 1
+    fi
+
+    export PATH="${LOCAL_BIN}:${PATH}"
+    hash -r
+
+    if ! command_exists fd; then
+        add_result FAILED_APPS 'fd（安装后无法执行）'
+        return 1
+    fi
+
+    success "已创建 fd 命令软链接: ${LOCAL_BIN}/fd"
+}
+
+install_pi_dependencies() {
+    install_pi_ripgrep_dependency || return 1
+    install_pi_fd_dependency || return 1
+}
+
+pi_latest_version() {
+    command -v npm >/dev/null 2>&1 || return 1
+    npm view @earendil-works/pi-coding-agent version 2>/dev/null \
+        | tail -n 1
+}
+
+install_pi_source() {
+    local method=$1
+    local install_script
+
+    case "${method}" in
+        1)
+            ensure_term_config_files || return 1
+            install_script="${TERM_CONFIG_FILES_DIR}/pi/install.sh"
+            if [[ ! -f "${install_script}" ]]; then
+                warn "找不到 ${install_script}。"
+                return 1
+            fi
+            bash "${install_script}"
+            ;;
+        2)
+            install_apt_dependency curl || return 1
+            curl -fsSL https://pi.dev/install.sh | sh
+            ;;
+        3)
+            if ! command -v npm >/dev/null 2>&1; then
+                warn '使用 npm 安装 Pi 需要先安装 nodejs 和 npm。'
+                return 1
+            fi
+            npm install -g --ignore-scripts \
+                @earendil-works/pi-coding-agent
+            ;;
+    esac
+}
+
+install_pi() {
+    local existed=0
+    local method
+    local current_version
+    local latest_version
+
+    if command_exists pi; then
+        existed=1
+
+        if [[ ${AUTO_YES} -eq 1 ]]; then
+            log '-y 模式不更新已存在的 pi。'
+            add_result EXISTING_APPS 'pi（未更新）'
+            return 0
+        fi
+
+        current_version=$(pi --version 2>&1 | extract_version || true)
+        latest_version=$(pi_latest_version || true)
+
+        if [[ -n "${current_version}" && -n "${latest_version}" ]] \
+            && dpkg --compare-versions \
+                "${current_version}" ge "${latest_version}"; then
+            log "pi 已是最新版本 (${current_version})。"
+            add_result EXISTING_APPS 'pi'
+            return 0
+        fi
+
+        if [[ -n "${current_version}" && -n "${latest_version}" ]]; then
+            printf '%spi 当前版本: %s，最新版本: %s。%s\n' \
+                "${YELLOW}" "${current_version}" \
+                "${latest_version}" "${NORMAL}"
+        else
+            warn '无法可靠获取 pi 的当前版本或最新版本。'
+        fi
+
+        if ! ask_yes_no '是否更新 pi？' N; then
+            add_result EXISTING_APPS 'pi（未更新）'
+            return 0
+        fi
+    else
+        if ! ask_yes_no 'pi: AI Agent，是否安装？' N; then
+            add_result SKIPPED_APPS 'pi'
+            return 0
+        fi
+    fi
+
+    install_pi_dependencies || return 1
+
+    method=$(ask_choice \
+        $'请选择 pi 安装方式：\n  1. 使用 ~/term-config-files中的版本\n  2. 下载并安装官方最新版\n  3. 使用 npm 安装' 1 2 3) || return 1
+
+    if install_pi_source "${method}"; then
+        export PATH="${LOCAL_BIN}:${PATH}"
+        hash -r
+
+        if command_exists pi; then
+            if [[ ${existed} -eq 1 ]]; then
+                add_result UPDATED_APPS 'pi'
+            else
+                add_result INSTALLED_APPS 'pi'
+            fi
+            return 0
+        fi
+    fi
+
+    add_result FAILED_APPS 'pi（安装失败）'
+    return 1
+}
+
 install_superfile() {
     local existed=0
     local method
@@ -1012,7 +1172,7 @@ install_superfile() {
             return 0
         fi
     else
-        if ! ask_yes_no 'superfile 是推荐应用，是否安装？' N; then
+        if ! ask_yes_no 'superfile: 终端文件管理器，是否安装？' N; then
             add_result SKIPPED_APPS 'superfile'
             return 0
         fi
@@ -1048,7 +1208,7 @@ install_getnf() {
             return 0
         fi
     else
-        if ! ask_yes_no 'getnf 是推荐应用，是否安装？' N; then
+        if ! ask_yes_no 'getnf: 用于安装 Nerd fonts（字体）的工具，是否安装？' N; then
             add_result SKIPPED_APPS 'getnf'
             return 0
         fi
@@ -1120,7 +1280,7 @@ install_glow() {
 
     installed_version=$(apt_installed_version glow)
     if [[ -z "${installed_version}" ]] \
-        && ! ask_yes_no 'glow 是推荐应用，是否安装？' N; then
+        && ! ask_yes_no 'glow: Markdown 阅读器，是否安装？' N; then
         add_result SKIPPED_APPS 'glow'
         return 0
     fi
@@ -1170,7 +1330,7 @@ install_lolcat() {
     fi
 
     if [[ -z "${installed_version}" ]] \
-        && ! ask_yes_no 'lolcat 是推荐应用，是否安装？' N; then
+        && ! ask_yes_no 'lolcat: 彩色的输出，是否安装？' N; then
         add_result SKIPPED_APPS 'lolcat'
         return 0
     fi
@@ -1269,16 +1429,17 @@ main() {
     install_with_retry git install_git || true
     install_with_retry nodejs install_nodejs || true
 
+    install_with_retry pi install_pi || true
     install_with_retry img2chr install_img2chr || true
     install_with_retry wd install_wd || true
     install_with_retry yazi install_yazi || true
     install_with_retry superfile install_superfile || true
-    install_with_retry getnf install_getnf || true
     install_with_retry glow install_glow || true
     install_with_retry figlet install_figlet || true
     install_with_retry lolcat install_lolcat || true
-    install_with_retry sl install_sl || true
     install_with_retry cowsay install_cowsay || true
+    install_with_retry sl install_sl || true
+    install_with_retry getnf install_getnf || true
 
     print_summary
 }

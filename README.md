@@ -4,17 +4,18 @@
 
 ## Config Files
 
-| name                                  | config file                                               | path to storage                  |
-| :-:                                   | :-:                                                       | :-:                              |
-| [tmux](./Documents/tmux.md)           | [tmux.conf](./confFiles/tmux/tmux.conf)                   | ~/.conf/tmux/tmux.conf           |
-| [zsh](./Documents/zsh.md)             | [.zshrc](./confFiles/zsh/.zshrc)                          | ~/.zshrc                         |
-| [vim](./Documents/vim.md)             | [.vimrc](./confFiles/vim/.vimrc)                          | ~/.vimrc                         |
-| [vimk](./Documents/vim.md)            | [keys.vim](./confFiles/vim/keys.vim)                      | ~/.conf/vim/keys.vim             |
-| [vimm](./Documents/vim.md)            | [mini.vim](./confFiles/vim/mini.vim)                      | ~/.conf/vim/mini.vim             |
-| [coc](./Documents/coc.md)             | [coc-settings.json](./confFiles/vim/coc-settings.json)    | ~/.vim/coc-settings.json         |
-| [termux](./Documents/termux.md)       | [termux.properties](./confFiles/termux/termux.properties) | ~/.termux/termux.properties      |
-| [superfile](./Documents/superfile.md) | [config.toml](./confFiles/superfile/config.toml)          | ~/.config/superfile/config.toml  |
-| [superfile](./Documents/superfile.md) | [hotkeys.toml](./confFiles/superfile/hotkeys.toml)        | ~/.config/superfile/hotkeys.toml |
+|                 name                  |                        config file                        |         path to storage          |
+| :-----------------------------------: | :-------------------------------------------------------: | :------------------------------: |
+|      [tmux](./Documents/tmux.md)      |          [tmux.conf](./confFiles/tmux/tmux.conf)          |      ~/.conf/tmux/tmux.conf      |
+|       [zsh](./Documents/zsh.md)       |             [.zshrc](./confFiles/zsh/.zshrc)              |             ~/.zshrc             |
+|       [vim](./Documents/vim.md)       |             [.vimrc](./confFiles/vim/.vimrc)              |             ~/.vimrc             |
+|      [vimk](./Documents/vim.md)       |           [keys.vim](./confFiles/vim/keys.vim)            |       ~/.conf/vim/keys.vim       |
+|      [vimm](./Documents/vim.md)       |           [mini.vim](./confFiles/vim/mini.vim)            |       ~/.conf/vim/mini.vim       |
+|       [coc](./Documents/coc.md)       |  [coc-settings.json](./confFiles/vim/coc-settings.json)   |     ~/.vim/coc-settings.json     |
+|    [termux](./Documents/termux.md)    | [termux.properties](./confFiles/termux/termux.properties) |   ~/.termux/termux.properties    |
+| [superfile](./Documents/superfile.md) |     [config.toml](./confFiles/superfile/config.toml)      | ~/.config/superfile/config.toml  |
+| [superfile](./Documents/superfile.md) |    [hotkeys.toml](./confFiles/superfile/hotkeys.toml)     | ~/.config/superfile/hotkeys.toml |
+|        [pi](./Documents/pi.md)        |    [keybindings.json](./confFiles/pi/keybindings.json)    |   ~/.pi/agent/keybindings.json   |
 |                                       |                                                           |                                  |
 
 > You can run [this shell script](./autoConfig/placeConfigFiles.sh) to automatically place the config files.
@@ -41,6 +42,7 @@
 |             [ruby](#ruby)             |      [ruby](#ruby)      |        `ruby`        |      install lolcat needed       |
 |          [img2chr](#img2chr)          |   [img2chr](#img2chr)   | `imgcat` / `img2chr` |       show images by chars       |
 |               [wd](#wd)               |        [wd](#wd)        |         `wd`         |      a translator by youdao      |
+|        [pi](./Documents/pi.md)        |        [pi](#pi)        |         `pi`         |     a minimal agent harness      |
 |                                       |                         |                      |                                  |
 
 ### Funny
@@ -51,6 +53,8 @@
 |     [sl](#sl)     |     [sl](#sl)     |   `sl`   |      a train is running      |
 | [cowsay](#cowsay) | [cowsay](#cowsay) | `cowsay` | a cow is saying something... |
 |                   |                   |          |                              |
+
+> You can run [this shell script](./autoConfig/install_apps.sh) to automatically install the softwares.
 
 ## Install (Ubuntu24.04 available)
 
@@ -158,6 +162,30 @@ cd ~
 git clone https://github.com/Lavenir7/term-config-files
 cp term-config-files/scripts/wd ~/.local/bin
 ```
+
+### pi
+
+- install by local-file
+
+```sh
+cd ~
+git clone https://github.com/Lavenir7/term-config-files
+bash ./term-config-files/pi/install.sh
+```
+
+- install online
+
+```sh
+curl -fsSL https://pi.dev/install.sh | sh
+```
+
+- install by npm
+
+```sh
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+```
+
+More install way see here: [Pi Coding Agent](https://pi.dev/)
 
 ### figlet
 
