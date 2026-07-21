@@ -22,11 +22,11 @@ source_files=(
 
 # 每个文件对应的完整目标路径。
 destination_files=(
-    "${HOME}/.conf/tmux/tmux.conf"
+    "${HOME}/.config/tmux/tmux.conf"
     "${HOME}/.zshrc"
     "${HOME}/.vimrc"
-    "${HOME}/.conf/vim/keys.vim"
-    "${HOME}/.conf/vim/mini.vim"
+    "${HOME}/.config/vim/keys.vim"
+    "${HOME}/.config/vim/mini.vim"
     "${HOME}/.vim/coc-settings.json"
     "${HOME}/.config/superfile/config.toml"
     "${HOME}/.config/superfile/hotkeys.toml"

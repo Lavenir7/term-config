@@ -6,11 +6,11 @@
 
 |                 name                  |                        config file                        |         path to storage          |
 | :-----------------------------------: | :-------------------------------------------------------: | :------------------------------: |
-|      [tmux](./Documents/tmux.md)      |          [tmux.conf](./confFiles/tmux/tmux.conf)          |      ~/.conf/tmux/tmux.conf      |
+|      [tmux](./Documents/tmux.md)      |          [tmux.conf](./confFiles/tmux/tmux.conf)          |      ~/.config/tmux/tmux.conf      |
 |       [zsh](./Documents/zsh.md)       |             [.zshrc](./confFiles/zsh/.zshrc)              |             ~/.zshrc             |
 |       [vim](./Documents/vim.md)       |             [.vimrc](./confFiles/vim/.vimrc)              |             ~/.vimrc             |
-|      [vimk](./Documents/vim.md)       |           [keys.vim](./confFiles/vim/keys.vim)            |       ~/.conf/vim/keys.vim       |
-|      [vimm](./Documents/vim.md)       |           [mini.vim](./confFiles/vim/mini.vim)            |       ~/.conf/vim/mini.vim       |
+|      [vimk](./Documents/vim.md)       |           [keys.vim](./confFiles/vim/keys.vim)            |       ~/.config/vim/keys.vim       |
+|      [vimm](./Documents/vim.md)       |           [mini.vim](./confFiles/vim/mini.vim)            |       ~/.config/vim/mini.vim       |
 |       [coc](./Documents/coc.md)       |  [coc-settings.json](./confFiles/vim/coc-settings.json)   |     ~/.vim/coc-settings.json     |
 |    [termux](./Documents/termux.md)    | [termux.properties](./confFiles/termux/termux.properties) |   ~/.termux/termux.properties    |
 | [superfile](./Documents/superfile.md) |     [config.toml](./confFiles/superfile/config.toml)      | ~/.config/superfile/config.toml  |
