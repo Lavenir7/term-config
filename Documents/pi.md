@@ -19,7 +19,26 @@ Thinking level
 
 ## Extensions
 
-### 操作前让用户确认
+### pi-cliproxyapi-provider
+
+> 使用 CLIProxyAPI 作为服务商
+
+安装官方 Pi CLIProxyAPI provider 插件：
+
+```sh
+pi install npm:@router-for-me/pi-cliproxyapi-provider
+```
+
+然后打开 Pi：
+
+1. 输入 `/login CLIProxyAPI`，填写 CLIProxyAPI 的 Base URL 和 API key；
+2. 输入 `/settings`，将 `Transport` 设置为 `websocket-cached`。
+
+参考：[CLIProxyAPI - Pi Agent](https://help.router-for.me/agent-client/pi.html#pi-agent)
+
+### ask-before-action
+
+> 操作前让用户确认
 
 create file `~/.pi/agent/extensions/ask-before-action.ts`
 

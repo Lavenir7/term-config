@@ -804,6 +804,96 @@ install_nodejs() {
         2) install_nodejs_direct ;;
     esac
 }
+
+npm_latest_version() {
+    local package=$1
+
+    command -v npm >/dev/null 2>&1 || return 1
+    npm view "${package}" version 2>/dev/null | tail -n 1
+}
+
+node_version_is_supported() {
+    local node_version
+
+    command -v node >/dev/null 2>&1 || return 1
+    node_version=$(node --version 2>/dev/null) || return 1
+    node_version=${node_version#v}
+    dpkg --compare-versions "${node_version}" ge 20.19.0
+}
+
+install_openspec() {
+    local existed=0
+    local current_version
+    local latest_version
+
+    if command_exists openspec; then
+        existed=1
+        current_version=$(openspec --version 2>&1 | extract_version || true)
+
+        if [[ ${AUTO_YES} -eq 1 ]]; then
+            log '-y 模式不更新已存在的 OpenSpec。'
+            add_result EXISTING_APPS 'OpenSpec（未更新）'
+            return 0
+        fi
+
+        latest_version=$(npm_latest_version @fission-ai/openspec || true)
+        if [[ -n "${current_version}" && -n "${latest_version}" ]] \
+            && dpkg --compare-versions "${current_version}" ge "${latest_version}"; then
+            log "OpenSpec 已是最新版本 (${current_version})。"
+            add_result EXISTING_APPS 'OpenSpec'
+            return 0
+        fi
+
+        if [[ -n "${current_version}" && -n "${latest_version}" ]]; then
+            printf '%sOpenSpec 当前版本: %s，最新版本: %s。%s\n' \
+                "${YELLOW}" "${current_version}" "${latest_version}" "${NORMAL}"
+        else
+            warn '无法可靠获取 OpenSpec 的当前版本或最新版本。'
+        fi
+
+        if ! ask_yes_no '是否更新 OpenSpec？' N; then
+            add_result EXISTING_APPS 'OpenSpec（未更新）'
+            return 0
+        fi
+    else
+        if ! ask_yes_no 'OpenSpec：面向 AI 原生的规范驱动开发系统，是否安装？' N; then
+            add_result SKIPPED_APPS 'OpenSpec'
+            return 0
+        fi
+    fi
+
+    if ! command -v npm >/dev/null 2>&1; then
+        add_result FAILED_APPS 'OpenSpec（需要 nodejs 和 npm）'
+        return 1
+    fi
+
+    if ! node_version_is_supported; then
+        warn 'OpenSpec 需要 Node.js 20.19.0 或更高版本。'
+        add_result FAILED_APPS 'OpenSpec（Node.js 版本不受支持）'
+        return 1
+    fi
+
+    if npm install -g @fission-ai/openspec@latest; then
+        hash -r
+    else
+        add_result FAILED_APPS 'OpenSpec（npm 安装失败）'
+        return 1
+    fi
+
+    if command_exists openspec; then
+        current_version=$(openspec --version 2>&1 | extract_version || true)
+        if [[ ${existed} -eq 1 ]]; then
+            add_result UPDATED_APPS "OpenSpec${current_version:+（${current_version}）}"
+        else
+            add_result INSTALLED_APPS "OpenSpec${current_version:+（${current_version}）}"
+        fi
+        return 0
+    fi
+
+    add_result FAILED_APPS 'OpenSpec（安装后找不到 openspec 命令）'
+    return 1
+}
+
 install_figlet() { install_apt_app figlet figlet recommended; }
 install_sl() { install_apt_app sl sl recommended; }
 install_cowsay() { install_apt_app cowsay cowsay recommended; }
@@ -1161,6 +1251,41 @@ install_pi() {
     return 1
 }
 
+pi_cliproxyapi_provider_installed() {
+    command_exists pi || return 1
+    pi list 2>/dev/null | grep -Fq '@router-for-me/pi-cliproxyapi-provider'
+}
+
+install_pi_cliproxyapi_provider() {
+    if ! command_exists pi; then
+        warn 'CLIProxyAPI Pi 插件需要先安装 pi，当前未找到 pi。'
+        add_result SKIPPED_APPS 'CLIProxyAPI Pi 插件（需要 pi）'
+        return 0
+    fi
+
+    if pi_cliproxyapi_provider_installed; then
+        log 'CLIProxyAPI Pi 插件已存在。'
+        add_result EXISTING_APPS 'CLIProxyAPI Pi 插件'
+        return 0
+    fi
+
+    if ! ask_yes_no \
+        'CLIProxyAPI Pi 插件：能够连接 CLIProxyAPI 使用模型，是否安装？' N; then
+        add_result SKIPPED_APPS 'CLIProxyAPI Pi 插件'
+        return 0
+    fi
+
+    if pi install npm:@router-for-me/pi-cliproxyapi-provider \
+        && pi_cliproxyapi_provider_installed; then
+        add_result INSTALLED_APPS 'CLIProxyAPI Pi 插件'
+        log '进入 pi 后执行 /login CLIProxyAPI，并在 /settings 中将 Transport 设置为 websocket-cached。'
+        return 0
+    fi
+
+    add_result FAILED_APPS 'CLIProxyAPI Pi 插件（安装失败）'
+    return 1
+}
+
 install_superfile() {
     local existed=0
     local method
@@ -1423,13 +1548,15 @@ main() {
     fi
     printf 'term-config-files 默认路径: %s\n' "${TERM_CONFIG_FILES_DIR}"
 
+    install_with_retry git install_git || true
+    install_with_retry vim install_vim || true
+    install_with_retry nodejs install_nodejs || true
     install_with_retry tmux install_tmux || true
     install_with_retry zsh install_zsh || true
-    install_with_retry vim install_vim || true
-    install_with_retry git install_git || true
-    install_with_retry nodejs install_nodejs || true
 
     install_with_retry pi install_pi || true
+    install_with_retry 'CLIProxyAPI Pi 插件' install_pi_cliproxyapi_provider || true
+    install_with_retry OpenSpec install_openspec || true
     install_with_retry img2chr install_img2chr || true
     install_with_retry wd install_wd || true
     install_with_retry yazi install_yazi || true

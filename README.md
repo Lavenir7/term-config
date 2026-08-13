@@ -43,6 +43,7 @@
 |          [img2chr](#img2chr)          |   [img2chr](#img2chr)   | `imgcat` / `img2chr` |       show images by chars       |
 |               [wd](#wd)               |        [wd](#wd)        |         `wd`         |      a translator by youdao      |
 |        [pi](./Documents/pi.md)        |        [pi](#pi)        |         `pi`         |     a minimal agent harness      |
+|        [OpenSpec](#openspec)          |   [OpenSpec](#openspec)  |      `openspec`      |  spec-driven development toolkit |
 |                                       |                         |                      |                                  |
 
 ### Funny
@@ -186,6 +187,17 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 ```
 
 More install way see here: [Pi Coding Agent](https://pi.dev/)
+
+### OpenSpec
+
+OpenSpec requires Node.js 20.19.0 or later.
+
+```sh
+npm install -g @fission-ai/openspec@latest
+openspec --version
+```
+
+More install way see here: [OpenSpec Chinese documentation](https://radebit.github.io/OpenSpec-Docs-zh/#installation)
 
 ### figlet
 

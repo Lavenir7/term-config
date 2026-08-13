@@ -14,14 +14,16 @@
 1. 首先安装应用 (`./install_apps.sh`)
 
     - 必备应用：
+        - git
+        - vim
+        - nodejs
         - tmux
         - zsh
-        - vim
-        - git
-        - nodejs
 
     - 可选应用：
         - pi
+        - CLIProxyAPI Pi 插件
+        - OpenSpec
         - img2chr
         - wd
         - yazi
@@ -64,6 +66,12 @@
     - 在安装完 coc.nvim 插件后，打开 `vim`，自动安装 coc.nvim 插件；
 
     - 打开 `pi`, 输入 `/login` 配置服务商和 api key
+
+        - 若使用 CLIProxyAPI 服务
+        
+            - 输入 `/login CLIProxyAPI` 配置 CLIProxyAPI 的 Base URL 和 API key；
+
+            - 然后输入 `/settings`，将 `Transport` 设置为 `websocket-cached`；
 
         - 【可选】配置完成后，输入 `/model` 设置模型
         
