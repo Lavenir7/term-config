@@ -311,8 +311,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 Plug 'vimwiki/vimwiki'
+" Plug 'voldikss/vim-floaterm' " floating terminal
 " AI
-" Plug 'Lavenir7/vim-deepseek'
+Plug 'madox2/vim-ai'
 
 call plug#end()
 
@@ -551,8 +552,172 @@ endfunction
 " 重命名变量
 " nnoremap <LEADER>rn <Plug>(coc-rename)
 
+
 " ===
-" === vim-deepseek
+" === vim-ai
 " ===
-" let g:deepseek_api_key = ''
-" let g:deepseek_model = 'dsV3'
+let g:vim_ai_token_file_path = '~/.vim/ai/tokens/revc.token'
+let g:vim_ai_roles_config_file = '~/.vim/ai/roles.ini'
+let g:vim_ai_async_chat = 1
+let g:vim_ai_chat_markdown = 1
+
+let s:vim_ai_endpoint_url = 'https://api.revc.top/v1/chat/completions'
+let s:vim_ai_image_endpoint_url = 'https://api.revc.top/v1/images/generations'
+
+" AI
+let s:initial_complete_prompt =<< trim END
+>>> system
+
+You are a general assistant.
+Answer shortly, consisely and only what you are asked.
+Do not provide any explanantion or comments if not requested.
+If you answer in a code, do not wrap it in markdown code block.
+END
+
+let g:vim_ai_complete = {
+\  "provider_name": "revc",
+\  "prompt": "",
+\  "options": {
+\    "model": "deepseek-flash",
+\    "endpoint_url": s:vim_ai_endpoint_url,
+\    "max_tokens": 0,
+\    "max_completion_tokens": 0,
+\    "temperature": 0.1,
+\    "request_timeout": 20,
+\    "stream": 1,
+\    "auth_type": "bearer",
+\    "token_file_path": "",
+\    "token_load_fn": "",
+\    "selection_boundary": "#####",
+\    "initial_prompt": s:initial_complete_prompt,
+\    "frequency_penalty": "",
+\    "logit_bias": "",
+\    "logprobs": "",
+\    "presence_penalty": "",
+\    "reasoning_effort": "",
+\    "seed": "",
+\    "stop": "",
+\    "top_logprobs": "",
+\    "top_p": "",
+\    "reasoning": "",
+\  },
+\  "ui": {
+\    "paste_mode": 1,
+\  },
+\}
+
+" AIEdit
+let g:vim_ai_edit = {
+\  "provider_name": "revc",
+\  "prompt": "",
+\  "options": {
+\    "model": "deepseek-flash",
+\    "endpoint_url": s:vim_ai_endpoint_url,
+\    "max_tokens": 0,
+\    "max_completion_tokens": 0,
+\    "temperature": 0.1,
+\    "request_timeout": 20,
+\    "stream": 1,
+\    "auth_type": "bearer",
+\    "token_file_path": "",
+\    "token_load_fn": "",
+\    "selection_boundary": "#####",
+\    "initial_prompt": s:initial_complete_prompt,
+\    "frequency_penalty": "",
+\    "logit_bias": "",
+\    "logprobs": "",
+\    "presence_penalty": "",
+\    "reasoning_effort": "",
+\    "seed": "",
+\    "stop": "",
+\    "top_logprobs": "",
+\    "top_p": "",
+\    "reasoning": "",
+\  },
+\  "ui": {
+\    "paste_mode": 1,
+\  },
+\}
+
+" AIChat
+let g:ai_chat_history_file = './vim_ai_chat_history.md'
+let s:initial_chat_prompt =<< trim END
+>>> system
+
+You are a general assistant.
+If you attach a code block add syntax type after ``` to enable syntax highlighting.
+END
+
+let g:vim_ai_chat = {
+\  "provider_name": "revc",
+\  "prompt": "",
+\  "options": {
+\    "model": "deepseek-flash",
+\    "max_tokens": 0,
+\    "max_completion_tokens": 0,
+\    "endpoint_url": s:vim_ai_endpoint_url,
+\    "temperature": 0.7,
+\    "request_timeout": 20,
+\    "stream": 1,
+\    "auth_type": "bearer",
+\    "token_file_path": "",
+\    "token_load_fn": "",
+\    "selection_boundary": "",
+\    "initial_prompt": s:initial_chat_prompt,
+\    "frequency_penalty": "",
+\    "logit_bias": "",
+\    "logprobs": "",
+\    "presence_penalty": "",
+\    "reasoning_effort": "",
+\    "seed": "",
+\    "stop": "",
+\    "top_logprobs": "",
+\    "top_p": "",
+\    "reasoning": "",
+\  },
+\  "ui": {
+\    "populate_options": 0,
+\    "populate_all_options": 0,
+\    "open_chat_command": "preset_right",
+\    "scratch_buffer_keep_open": 0,
+\    "paste_mode": 1,
+\  },
+\}
+
+" AIImage
+let g:vim_ai_image = {
+\  "provider_name": "revc",
+\  "prompt": "",
+\  "options": {
+\    "model": "gpt-image-2",
+\    "endpoint_url": s:vim_ai_image_endpoint_url,
+\    "quality": "standard",
+\    "size": "1024x1024",
+\    "style": "vivid",
+\    "request_timeout": 600,
+\    "auth_type": "bearer",
+\    "token_file_path": "",
+\    "token_load_fn": "",
+\  },
+\  "ui": {
+\    "download_dir": "~/images/",
+\  },
+\}
+
+" Key bindings
+nnoremap <LEADER>ai :.AI<CR>
+vnoremap <LEADER>ai :AI<CR>
+
+nnoremap <LEADER>ae :.AIEdit<CR>
+vnoremap <LEADER>ae :AIEdit<CR>
+
+nnoremap <LEADER>at :.AIEdit /trans2cn<CR>
+vnoremap <LEADER>at :AIEdit /trans2cn<CR>
+
+nnoremap <LEADER>ac :AIChat<CR>
+vnoremap <LEADER>ac :AIChat<CR>
+nnoremap <LEADER>as :AIStopChat<CR>
+vnoremap <LEADER>as :AIStopChat<CR>
+nnoremap <LEADER>ar :AIRedo<CR>
+vnoremap <LEADER>ar :AIRedo<CR>
+

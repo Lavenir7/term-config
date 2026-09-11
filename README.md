@@ -12,6 +12,7 @@
 |      [vimk](./Documents/vim.md)       |           [keys.vim](./confFiles/vim/keys.vim)            |       ~/.config/vim/keys.vim       |
 |      [vimm](./Documents/vim.md)       |           [mini.vim](./confFiles/vim/mini.vim)            |       ~/.config/vim/mini.vim       |
 |       [coc](./Documents/coc.md)       |  [coc-settings.json](./confFiles/vim/coc-settings.json)   |     ~/.vim/coc-settings.json     |
+|     [vim-ai](./Documents/vim.md)      |       [roles.ini](./confFiles/vim/vim-ai/roles.ini)       |       ~/.vim/ai/roles.ini        |
 |    [termux](./Documents/termux.md)    | [termux.properties](./confFiles/termux/termux.properties) |   ~/.termux/termux.properties    |
 | [superfile](./Documents/superfile.md) |     [config.toml](./confFiles/superfile/config.toml)      | ~/.config/superfile/config.toml  |
 | [superfile](./Documents/superfile.md) |    [hotkeys.toml](./confFiles/superfile/hotkeys.toml)     | ~/.config/superfile/hotkeys.toml |
