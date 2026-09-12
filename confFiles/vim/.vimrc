@@ -549,8 +549,6 @@ function! s:show_documentation()
         call CocAction('doHover')
     endif
 endfunction
-" 重命名变量
-" nnoremap <LEADER>rn <Plug>(coc-rename)
 
 
 " ===
@@ -558,11 +556,13 @@ endfunction
 " ===
 let g:vim_ai_token_file_path = '~/.vim/ai/tokens/revc.token'
 let g:vim_ai_roles_config_file = '~/.vim/ai/roles.ini'
+let g:ai_chat_history_file = './vim_ai_chat_history.md'
 let g:vim_ai_async_chat = 1
 let g:vim_ai_chat_markdown = 1
 
 let s:vim_ai_endpoint_url = 'https://api.revc.top/v1/chat/completions'
 let s:vim_ai_image_endpoint_url = 'https://api.revc.top/v1/images/generations'
+let s:vim_ai_image_download_dir = '~/.vim/ai/images'
 
 " AI
 let s:initial_complete_prompt =<< trim END
@@ -640,7 +640,6 @@ let g:vim_ai_edit = {
 \}
 
 " AIChat
-let g:ai_chat_history_file = './vim_ai_chat_history.md'
 let s:initial_chat_prompt =<< trim END
 >>> system
 
@@ -692,7 +691,7 @@ let g:vim_ai_image = {
 \    "model": "gpt-image-2",
 \    "endpoint_url": s:vim_ai_image_endpoint_url,
 \    "quality": "standard",
-\    "size": "1024x1024",
+\    "size": "",
 \    "style": "vivid",
 \    "request_timeout": 600,
 \    "auth_type": "bearer",
@@ -700,7 +699,7 @@ let g:vim_ai_image = {
 \    "token_load_fn": "",
 \  },
 \  "ui": {
-\    "download_dir": "~/images/",
+\    "download_dir": s:vim_ai_image_download_dir,
 \  },
 \}
 
