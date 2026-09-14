@@ -7,7 +7,6 @@
 |                 name                  |                        config file                        |         path to storage          |
 | :-----------------------------------: | :-------------------------------------------------------: | :------------------------------: |
 |      [tmux](./Documents/tmux.md)      |          [tmux.conf](./confFiles/tmux/tmux.conf)          |     ~/.config/tmux/tmux.conf     |
-|     [herdr](./Documents/herdr.md)     |       [config.conf](./confFiles/herdr/config.toml)        |    ~/.conf/herdr/config.toml     |
 |       [zsh](./Documents/zsh.md)       |             [.zshrc](./confFiles/zsh/.zshrc)              |             ~/.zshrc             |
 |       [vim](./Documents/vim.md)       |             [.vimrc](./confFiles/vim/.vimrc)              |             ~/.vimrc             |
 |      [vimk](./Documents/vim.md)       |           [keys.vim](./confFiles/vim/keys.vim)            |       ~/.config/vim/keys.vim       |
@@ -18,7 +17,8 @@
 | [superfile](./Documents/superfile.md) |     [config.toml](./confFiles/superfile/config.toml)      | ~/.config/superfile/config.toml  |
 | [superfile](./Documents/superfile.md) |    [hotkeys.toml](./confFiles/superfile/hotkeys.toml)     | ~/.config/superfile/hotkeys.toml |
 |        [pi](./Documents/pi.md)        |    [keybindings.json](./confFiles/pi/keybindings.json)    |   ~/.pi/agent/keybindings.json   |
-|                                       |                                                           |                                  |
+| [herdr](./Documents/herdr.md) | [config.conf](./confFiles/herdr/config.toml) | ~/.conf/herdr/config.toml |
+|  |  |  |
 
 > You can run [this shell script](./autoConfig/placeConfigFiles.sh) to automatically place the config files.
 
@@ -46,7 +46,8 @@
 |               [wd](#wd)               |        [wd](#wd)        |         `wd`         |      a translator by youdao      |
 |        [pi](./Documents/pi.md)        |        [pi](#pi)        |         `pi`         |     a minimal agent harness      |
 |        [OpenSpec](#openspec)          |   [OpenSpec](#openspec)  |      `openspec`      |  spec-driven development toolkit |
-|                                       |                         |                      |                                  |
+| [herdr](./Documents/herdr.md) | [herdr](#herdr) | `herdr` | terminal multiplexer with agent |
+|  |  |  |  |
 
 ### Funny
 |       name        |    install way    | command  |         description          |
@@ -200,6 +201,14 @@ openspec --version
 ```
 
 More install way see here: [OpenSpec Chinese documentation](https://radebit.github.io/OpenSpec-Docs-zh/#installation)
+
+### herdr
+
+```sh
+curl -fsSL https://herdr.dev/install.sh | sh
+```
+
+More install way see here: [安装 Herdr | herdr](https://herdr.dev/zh-cn/docs/install/)
 
 ### figlet
 
