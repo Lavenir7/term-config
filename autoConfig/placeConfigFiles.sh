@@ -10,6 +10,7 @@ conf_path="${project_root}/confFiles"
 # 源文件，相对于 confFiles。
 source_files=(
     "tmux/tmux.conf"
+    "herdr/config.toml"
     "zsh/.zshrc"
     "vim/.vimrc"
     "vim/keys.vim"
@@ -24,6 +25,7 @@ source_files=(
 # 每个文件对应的完整目标路径。
 destination_files=(
     "${HOME}/.config/tmux/tmux.conf"
+    "${HOME}/.config/herdr"
     "${HOME}/.zshrc"
     "${HOME}/.vimrc"
     "${HOME}/.config/vim/keys.vim"

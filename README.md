@@ -6,7 +6,8 @@
 
 |                 name                  |                        config file                        |         path to storage          |
 | :-----------------------------------: | :-------------------------------------------------------: | :------------------------------: |
-|      [tmux](./Documents/tmux.md)      |          [tmux.conf](./confFiles/tmux/tmux.conf)          |      ~/.config/tmux/tmux.conf      |
+|      [tmux](./Documents/tmux.md)      |          [tmux.conf](./confFiles/tmux/tmux.conf)          |     ~/.config/tmux/tmux.conf     |
+|     [herdr](./Documents/herdr.md)     |       [config.conf](./confFiles/herdr/config.toml)        |    ~/.conf/herdr/config.toml     |
 |       [zsh](./Documents/zsh.md)       |             [.zshrc](./confFiles/zsh/.zshrc)              |             ~/.zshrc             |
 |       [vim](./Documents/vim.md)       |             [.vimrc](./confFiles/vim/.vimrc)              |             ~/.vimrc             |
 |      [vimk](./Documents/vim.md)       |           [keys.vim](./confFiles/vim/keys.vim)            |       ~/.config/vim/keys.vim       |
